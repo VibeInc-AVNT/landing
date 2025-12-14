@@ -1,44 +1,93 @@
 ---
-import LinkBlend from "@components/global/LinkBlend.astro";
 import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
+
+const stats = [
+	{ value: t("hero.stat.latency"), label: t("hero.stat.latency.label") },
+	{ value: t("hero.stat.locations"), label: t("hero.stat.locations.label") },
+	{ value: t("hero.stat.uptime"), label: t("hero.stat.uptime.label") },
+	{ value: t("hero.stat.requests"), label: t("hero.stat.requests.label") },
+];
 ---
 
-<section id="hero" class="section home-dark-section hero min-h-screen">
-	<div class="mx-auto flex h-full flex-col py-4 lg:py-10">
-		<div class="relative flex flex-1 flex-col justify-around rounded-lg pb-10 pt-20 lg:rounded-2xl">
+<section id="hero" class="section hero relative min-h-screen bg-white dark:bg-vibe-purple-900">
+	<div class="relative z-10 mx-auto flex h-full flex-col py-4 lg:py-10">
+		<div class="relative flex flex-1 flex-col justify-center pb-10 pt-20 lg:pt-10">
+			<!-- Badge -->
+			<div class="mb-8 flex justify-center">
+				<div class="inline-flex items-center gap-2 rounded-full border border-vibe-purple/20 bg-vibe-purple-50 px-4 py-2 dark:border-vibe-yellow/30 dark:bg-vibe-purple-800/50">
+					<span class="h-2 w-2 rounded-full bg-vibe-yellow"></span>
+					<span class="text-sm font-medium text-vibe-purple dark:text-vibe-yellow">{t("hero.badge")}</span>
+				</div>
+			</div>
+
+			<!-- Main headline -->
 			<div class="flex justify-center">
-				<h1 class="text-center font-display text-5xl font-extrabold uppercase sm:text-7xl md:text-8xl lg:text-9xl">
-					<span>{t("hero.title.main")}</span>
-					<span class="rotator relative inline-flex h-20 w-full justify-center md:h-24 lg:h-32">
-						<span>{t("hero.title.1")}</span><span>{t("hero.title.2")}</span><span>{t("hero.title.3")}</span><span>
-							{t("hero.title.4")}
-						</span><span>{t("hero.title.1")}</span>
+				<h1 class="hero-title text-center font-display text-5xl font-extrabold uppercase leading-tight sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">
+					<span class="text-gray-900 dark:text-white">{t("hero.title.main")}</span>
+					<br />
+					<span class="text-vibe-purple dark:text-vibe-indigo">at the Speed of</span>
+					<br />
+					<span class="rotator relative inline-flex h-16 w-full justify-center overflow-hidden sm:h-20 md:h-24 lg:h-32">
+						<span class="absolute text-vibe-yellow">{t("hero.title.1")}</span>
+						<span class="absolute text-vibe-orange">{t("hero.title.2")}</span>
+						<span class="absolute text-vibe-red">{t("hero.title.3")}</span>
+						<span class="absolute text-vibe-indigo">{t("hero.title.4")}</span>
+						<span class="absolute text-vibe-yellow">{t("hero.title.1")}</span>
 					</span>
 				</h1>
 			</div>
-			<div class="flex flex-col items-center gap-5 text-center lg:gap-10">
-				<p class="mt-8 max-w-3xl font-mono lg:text-lg">
+
+			<!-- Subtitle and CTAs -->
+			<div class="mt-8 flex flex-col items-center gap-8 text-center lg:mt-12">
+				<p class="max-w-2xl text-lg text-gray-600 dark:text-gray-300 md:text-xl lg:text-2xl">
 					{t("hero.subtitle")}
 				</p>
-				<div class="flex flex-col items-center justify-center gap-3 lg:col-start-1">
-					<div class="squircle-bg rounded-lg bg-zinc-900" data-cursor-hover data-cursor-parallax>
-						<a
-							class="flex h-10 w-full max-w-52 flex-1 items-center justify-center px-4 py-2 text-xl text-slate-200 transition-all hover:text-white sm:w-auto md:font-bold lg:h-10"
-							aria-label="Contact Page"
-							href={translatePath("/contact/")}>
-							{t("contact")}
-						</a>
-					</div>
 
-					<small>
-						{t("or")}
-						<LinkBlend id="go-projects-button" isButton={true}>{t("hero.scroll")}</LinkBlend>
-					</small>
+				<div class="flex flex-col items-center gap-4 sm:flex-row">
+					<a
+						href={translatePath("/contact/")}
+						class="inline-flex items-center gap-2 rounded-lg bg-vibe-purple px-6 py-3 text-lg font-semibold text-white transition-all hover:bg-vibe-purple-600 dark:bg-vibe-yellow dark:text-vibe-purple-900 dark:hover:bg-vibe-yellow-400">
+						{t("hero.cta.primary")}
+						<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+						</svg>
+					</a>
+					<button id="watch-demo-btn" class="inline-flex items-center gap-2 rounded-lg border-2 border-gray-200 px-6 py-3 text-lg font-semibold text-gray-700 transition-all hover:border-vibe-purple hover:text-vibe-purple dark:border-vibe-purple-600 dark:text-gray-300 dark:hover:border-vibe-yellow dark:hover:text-vibe-yellow">
+						<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+						</svg>
+						{t("hero.cta.secondary")}
+					</button>
 				</div>
+			</div>
+
+			<!-- Stats row -->
+			<div class="mt-16 lg:mt-24">
+				<div class="mx-auto grid max-w-4xl grid-cols-2 gap-8 md:grid-cols-4">
+					{stats.map((stat, i) => (
+						<div class="stat-item text-center" style={`animation-delay: ${i * 0.1}s;`}>
+							<div class="text-3xl font-bold md:text-4xl lg:text-5xl">
+								<span class="text-vibe-purple dark:text-vibe-yellow">{stat.value}</span>
+							</div>
+							<div class="mt-2 text-sm text-gray-500 dark:text-gray-400 md:text-base">{stat.label}</div>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<!-- Scroll indicator -->
+			<div class="mt-16 flex justify-center lg:mt-24">
+				<button id="scroll-to-content" class="flex flex-col items-center gap-2 text-gray-500 transition-colors hover:text-vibe-purple dark:hover:text-vibe-yellow">
+					<span class="text-sm">{t("hero.scroll")}</span>
+					<svg class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+					</svg>
+				</button>
 			</div>
 		</div>
 	</div>
@@ -47,91 +96,76 @@ const translatePath = useTranslatedPath(lang);
 <style>
 	.hero {
 		padding-bottom: 0;
-		position: relative;
-		border-radius: inherit;
-		overflow: hidden;
 	}
 	.hero > div {
 		grid-column: 1 / span 12;
 	}
 
-	/* Hero appearance */
-	.hero h1,
-	.hero h2,
-	.hero h3 {
-		margin: 0;
+	.hero-title {
+		animation: fadeInUp 1s ease-out;
 	}
-	.hero h1 {
-		margin: 0;
-		position: relative;
-		overflow: hidden;
-		visibility: hidden;
-	}
-	.hero h1 > div {
-		position: relative;
-		margin: 0;
-	}
-	.hero :global(.split-parent) {
-		overflow: hidden;
-	}
-	.hero :global(.split-child) {
-		display: inline-block;
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 
 	/* Text rotator */
 	.rotator > span {
 		position: absolute;
+		opacity: 0;
+		transform: translateY(100%);
+		transition: opacity 0.6s ease, transform 0.6s ease;
 	}
 
-	.rotator > span:not(:nth-child(1)) {
-		opacity: 0;
+	.rotator > span:first-child {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.stat-item {
+		animation: fadeInUp 0.8s ease-out both;
 	}
 </style>
 
 <script>
-	// Lightweight hero entrance and rotator replacement (no GSAP)
 	function init() {
-		const heroH1 = document.querySelector('.hero h1');
-		if (heroH1) {
-			// Reveal the h1
-			heroH1.style.visibility = 'visible';
-			heroH1.style.transition = 'transform 800ms cubic-bezier(.22,.9,.18,1), opacity 800ms';
-			heroH1.style.transform = 'translateY(0)';
-			heroH1.style.opacity = '1';
-		}
-
-		// Rotator fallback
+		// Text rotator
 		const words = document.querySelectorAll('.hero .rotator > span');
 		if (words.length) {
-			words.forEach((w, i) => {
-				w.style.transition = 'opacity 600ms, transform 600ms';
-				if (i !== 0) {
-					w.style.opacity = '0';
-					w.style.transform = 'translateY(100%)';
-				} else {
-					w.style.opacity = '1';
-					w.style.transform = 'translateY(0)';
-				}
-			});
-
 			let idx = 0;
 			setInterval(() => {
 				const next = (idx + 1) % words.length;
-				words[idx].style.opacity = '0';
-				words[idx].style.transform = 'translateY(-100%)';
-				words[next].style.opacity = '1';
-				words[next].style.transform = 'translateY(0)';
+				(words[idx] as HTMLElement).style.opacity = '0';
+				(words[idx] as HTMLElement).style.transform = 'translateY(-100%)';
+				(words[next] as HTMLElement).style.opacity = '1';
+				(words[next] as HTMLElement).style.transform = 'translateY(0)';
 				idx = next;
 			}, 2500);
 		}
 
-		const goProjectsButton = document.getElementById('go-projects-button');
-		goProjectsButton?.addEventListener('click', function () {
-			const target = document.querySelector('#projects');
-			target?.scrollIntoView({ behavior: 'smooth' });
+		// Scroll to content button
+		const scrollBtn = document.getElementById('scroll-to-content');
+		scrollBtn?.addEventListener('click', () => {
+			const nextSection = document.getElementById('problem');
+			nextSection?.scrollIntoView({ behavior: 'smooth' });
+		});
+
+		// Watch demo button (could open modal or link to video)
+		const demoBtn = document.getElementById('watch-demo-btn');
+		demoBtn?.addEventListener('click', () => {
+			// For now, scroll to how-it-works section
+			const howItWorks = document.getElementById('how-it-works');
+			howItWorks?.scrollIntoView({ behavior: 'smooth' });
 		});
 	}
 
-	document.removeEventListener('DOMContentLoaded', init); // astro:page-load
-	document.addEventListener('DOMContentLoaded', init); // astro:page-load
+	document.removeEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', init);
 </script>
