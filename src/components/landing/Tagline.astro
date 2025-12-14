@@ -47,72 +47,46 @@ const translatePath = useTranslatedPath(lang);
 </style>
 
 <script>
-	import { gsap } from "gsap";
-	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { SplitText } from "gsap/SplitText";
-	import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-	import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-
-	gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, MotionPathPlugin);
-
+	// Lightweight replacements for the former GSAP animations.
+	// - Draw the SVG path using stroke-dashoffset
+	// - Fade in the arrow
+	// - Animate the tagline background position when it enters the viewport
 	function init() {
 		const linePath = document.querySelector("#tagline-arrow-path");
+		const arrow = document.querySelector("#tagline-arrow");
+		const tagline = document.querySelector("#services-tagline");
 
-		gsap.set(linePath, { drawSVG: 0 });
+		if (linePath) {
+			const length = linePath.getTotalLength();
+			linePath.style.strokeDasharray = length;
+			linePath.style.strokeDashoffset = length;
+			linePath.style.transition = 'stroke-dashoffset 600ms linear';
 
-		let otherQTl = gsap
-			.timeline({
-				scrollTrigger: {
-					trigger: ".tagline-arrows",
-					start: "center bottom",
-					end: "center center",
-					markers: false,
-					scrub: 1,
-				},
-			})
-			.to(
-				linePath,
-				{
-					drawSVG: "100%",
-				},
-				"<",
-			)
-			.to(
-				"#tagline-arrow",
-				{
-					opacity: 1,
-					duration: 0.1,
-				},
-				"<",
-			)
-			.to(
-				"#tagline-arrow",
-				{
-					motionPath: {
-						path: "#tagline-arrow-path",
-						align: "#tagline-arrow-path",
-						alignOrigin: [0.5, 0.5],
-						autoRotate: 30,
-					},
-				},
-				0,
-			);
+			const io = new IntersectionObserver(entries => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						linePath.style.strokeDashoffset = '0';
+						if (arrow) arrow.style.transition = 'opacity 200ms';
+						if (arrow) arrow.style.opacity = '1';
+					}
+				});
+			}, { threshold: 0.1 });
 
-		const split = new SplitText("#services-tagline", { type: "lines" });
+			io.observe(document.querySelector('.tagline-arrows'));
+		}
 
-		split.lines.forEach((target) => {
-			gsap.to(target, {
-				backgroundPositionX: 0,
-				ease: "none",
-				scrollTrigger: {
-					trigger: target,
-					markers: false,
-					scrub: 1,
-					start: "top bottom-=20%",
-					end: "bottom bottom-=10%",
-				},
-			});
-		});
+		if (tagline) {
+			tagline.style.transition = 'background-position-x 600ms linear';
+			const io2 = new IntersectionObserver(entries => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						tagline.style.backgroundPositionX = '0';
+					}
+				});
+			}, { threshold: 0.1 });
+
+			io2.observe(tagline);
+		}
 	}
 
 	document.removeEventListener("DOMContentLoaded", init); // astro:page-load

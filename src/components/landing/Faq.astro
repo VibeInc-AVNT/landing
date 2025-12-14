@@ -197,60 +197,49 @@ const faqs = [
 </style>
 
 <script>
-	import { gsap } from "gsap";
-	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-
-	gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
-
+	// Replacements for the previous GSAP scroll animations using IntersectionObserver
 	function init() {
-		gsap.to("#faq", {
-			scrollTrigger: {
-				trigger: "#faq",
-				start: "bottom center",
-				end: "bottom top",
-				scrub: 1,
-				markers: false,
-			},
-			"--faq-clip": "2vw",
-			"--faq-radius": "5rem",
-		});
+		const faqSection = document.querySelector('#faq');
+		if (faqSection) {
+			const io = new IntersectionObserver(entries => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						faqSection.style.transition = '--faq-clip 800ms ease, --faq-radius 800ms ease';
+						faqSection.style.setProperty('--faq-clip', '2vw');
+						faqSection.style.setProperty('--faq-radius', '5rem');
+					} else {
+						faqSection.style.setProperty('--faq-clip', '0');
+						faqSection.style.setProperty('--faq-radius', '0');
+					}
+				});
+			}, { threshold: 0.1 });
 
-		const linePath = document.querySelector("#faq-more-question-path");
+			io.observe(faqSection);
+		}
 
-		gsap.set(linePath, { drawSVG: 0 });
+		const linePath = document.querySelector('#faq-more-question-path');
+		if (linePath) {
+			const len = linePath.getTotalLength();
+			linePath.style.strokeDasharray = len;
+			linePath.style.strokeDashoffset = len;
+			linePath.style.transition = 'stroke-dashoffset 1800ms linear';
 
-		let otherQTl = gsap
-			.timeline({
-				scrollTrigger: {
-					trigger: ".faq-more-questions",
-					start: "center 90%",
-					end: "center top",
-					markers: false,
-					toggleActions: "play none none reverse",
-				},
-			})
-			.to(".faq-more-questions .other-question-title", {
-				opacity: 1,
-				duration: 0.5,
-			})
-			.to(
-				linePath,
-				{
-					drawSVG: "100%",
-					duration: 2,
-				},
-				"<",
-			)
-			.to(
-				".faq-contact-us-button",
-				{
-					opacity: 1,
-				},
-				">-=1.5",
-			);
+			const io2 = new IntersectionObserver(entries => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						linePath.style.strokeDashoffset = '0';
+						const title = document.querySelector('.faq-more-questions .other-question-title');
+						if (title) title.style.opacity = '1';
+						const btn = document.querySelector('.faq-contact-us-button');
+						if (btn) btn.style.opacity = '1';
+					}
+				});
+			}, { threshold: 0.2 });
+
+			io2.observe(document.querySelector('.faq-more-questions'));
+		}
 	}
 
-	document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-	document.addEventListener("DOMContentLoaded", init); // astro:page-load
+	document.removeEventListener('DOMContentLoaded', init); // astro:page-load
+	document.addEventListener('DOMContentLoaded', init); // astro:page-load
 </script>

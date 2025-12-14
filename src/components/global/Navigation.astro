@@ -287,83 +287,64 @@ const { pathname } = Astro.url;
 </style>
 
 <script>
-	import { gsap } from "gsap";
-	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-
-	gsap.registerPlugin(DrawSVGPlugin, ScrollTrigger);
-
+	// Replace logo draw animation and menu GSAP timeline with simpler, CSS + JS alternatives
 	function init() {
-		gsap.timeline({
-			defaults: {
-				duration: 1,
-				ease: "power2.out",
-			},
-		})
-			.from(".logo-svg path", { drawSVG: 0 })
-			.to(".logo-svg path", { fill: "#000", duration: 2 }, "<+=0.5");
+		// Animate logo paths (stroke draw + fill) without GSAP
+		const paths = document.querySelectorAll('.logo-svg path');
+		paths.forEach((p, i) => {
+			try {
+				const len = p.getTotalLength();
+				p.style.strokeDasharray = len;
+				p.style.strokeDashoffset = len;
+				p.style.transition = 'stroke-dashoffset 800ms ease, fill 1200ms ease';
+				// trigger draw + fill
+				setTimeout(() => {
+					p.style.strokeDashoffset = '0';
+					p.style.fill = '#000';
+				}, 100 * i + 200);
+			} catch (e) {
+				// ignore
+			}
+		});
 
 		let isHoveringMenu = false;
 		let menuCollapsed = false;
 
-		const pageLinksUl = document.querySelector("header .nav-container nav ul");
+		const pageLinksUl = document.querySelector('header .nav-container nav ul');
+		if (!pageLinksUl) return;
 
-		if (!pageLinksUl) {
-			return;
+		const navContainer = document.querySelector('.nav-container');
+		if (navContainer) navContainer.style.transition = 'width 0.4s ease';
+		pageLinksUl.style.transition = 'transform 0.4s ease';
+
+		function computeX() {
+			const pathName = window.location.pathname;
+			if (pathName === '/' || pathName === '/it/') return '9.5rem';
+			if (pathName.startsWith('/blog') || pathName.startsWith('/it/blog')) return '3.5rem';
+			return '-3.5rem';
 		}
 
-		let menuCollapseTl = gsap
-			.timeline({
-				defaults: {
-					ease: "back.inOut(1.7)",
-					duration: 0.4,
-				},
-				paused: true,
-				onStart: () => {
-					pageLinksUl.classList.add("collapsed");
-				},
-			})
-			.to("header .nav-container", { width: 125 })
-			.to(
-				pageLinksUl,
-				{
-					x: () => {
-						const pathName = window.location.pathname;
+		function expandMenu() {
+			if (navContainer) navContainer.style.width = '';
+			pageLinksUl?.classList.remove('collapsed');
+			document.querySelector('header .navigation')?.classList.remove('collapsed');
+			pageLinksUl.style.transform = 'translateX(0)';
+			menuCollapsed = false;
+		}
 
-						if (pathName === "/" || pathName === "/it/") {
-							return "9.5rem";
-						} else if (pathName.startsWith("/blog") || pathName.startsWith("/it/blog")) {
-							return "3.5rem";
-						}
+		function collapseMenu() {
+			if (window.scrollY > 200) {
+				if (navContainer) navContainer.style.width = '125px';
+				pageLinksUl?.classList.add('collapsed');
+				document.querySelector('header .navigation')?.classList.add('collapsed');
+				pageLinksUl.style.transform = `translateX(${computeX()})`;
+				menuCollapsed = true;
+			}
+		}
 
-						return "-3.5rem";
-					},
-				},
-				"<",
-			);
-
-		const isTouchDevice = window.matchMedia("(hover: none)").matches;
-
+		const isTouchDevice = window.matchMedia('(hover: none)').matches;
 		if (window.innerWidth >= 768 && !isTouchDevice) {
-			function expandMenu() {
-				menuCollapseTl.reverse();
-				pageLinksUl?.classList.remove("collapsed");
-				document.querySelector("header .navigation")?.classList.remove("collapsed");
-				menuCollapsed = false;
-			}
-
-			function collapseMenu() {
-				if (window.scrollY > 200) {
-					menuCollapseTl.play();
-					pageLinksUl?.classList.add("collapsed");
-					document.querySelector("header .navigation")?.classList.add("collapsed");
-					menuCollapsed = true;
-				}
-			}
-
 			collapseMenu();
-
-			const navContainer = document.querySelector(".nav-container") as HTMLElement;
 
 			function mouseEnterHandler() {
 				isHoveringMenu = true;
@@ -375,6 +356,12 @@ const { pathname } = Astro.url;
 				collapseMenu();
 			}
 
+			navContainer?.removeEventListener('mouseenter', mouseEnterHandler);
+			navContainer?.addEventListener('mouseenter', mouseEnterHandler);
+
+			navContainer?.removeEventListener('mouseleave', mouseLeaveHandler);
+			navContainer?.addEventListener('mouseleave', mouseLeaveHandler);
+
 			function handleScroll() {
 				if (window.scrollY > 200 && !isHoveringMenu && !menuCollapsed) {
 					collapseMenu();
@@ -383,17 +370,11 @@ const { pathname } = Astro.url;
 				}
 			}
 
-			navContainer?.removeEventListener("mouseenter", mouseEnterHandler);
-			navContainer?.addEventListener("mouseenter", mouseEnterHandler);
-
-			navContainer?.removeEventListener("mouseleave", mouseLeaveHandler);
-			navContainer?.addEventListener("mouseleave", mouseLeaveHandler);
-
-			window?.removeEventListener("scroll", handleScroll);
-			window?.addEventListener("scroll", handleScroll);
+			window?.removeEventListener('scroll', handleScroll);
+			window?.addEventListener('scroll', handleScroll);
 		}
 	}
 
-	document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-	document.addEventListener("DOMContentLoaded", init); // astro:page-load
+	document.removeEventListener('DOMContentLoaded', init); // astro:page-load
+	document.addEventListener('DOMContentLoaded', init); // astro:page-load
 </script>

@@ -30,36 +30,34 @@ const { class: className } = Astro.props;
 </section>
 
 <script>
-	import { gsap } from "gsap";
-	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-
-	gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
-
+	// Scroll-linked SVG drawing without GSAP
 	function init() {
-		const linePath = document.querySelector(".all-in-one-line-path");
+		const linePath = document.querySelector('.all-in-one-line-path');
+		const wrapper = document.querySelector('.line-animation-wrapper');
+		if (!linePath || !wrapper) return;
 
-		gsap.set(linePath, { drawSVG: 0 });
+		const len = linePath.getTotalLength();
+		linePath.style.strokeDasharray = len;
+		linePath.style.strokeDashoffset = len;
+		linePath.style.transition = 'stroke-dashoffset 0s linear';
 
-		gsap.timeline({
-			scrollTrigger: {
-				trigger: ".line-animation-wrapper",
-				scrub: 1,
-				start: "top center",
-				end: "bottom center",
-				markers: false,
-			},
-			defaults: { ease: "none" },
-		}).to(
-			linePath,
-			{
-				drawSVG: "100%",
-				// ease: "power4.in",
-			},
-			0,
-		);
+		let ticking = false;
+		function onScroll() {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				const rect = wrapper.getBoundingClientRect();
+				const winH = window.innerHeight || document.documentElement.clientHeight;
+				const progress = Math.max(0, Math.min(1, (winH - rect.top) / (rect.height + winH)));
+				linePath.style.strokeDashoffset = String(len * (1 - progress));
+				ticking = false;
+			});
+		}
+
+		document.addEventListener('scroll', onScroll, { passive: true });
+		onScroll();
 	}
 
-	document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-	document.addEventListener("DOMContentLoaded", init); // astro:page-load
+	document.removeEventListener('DOMContentLoaded', init); // astro:page-load
+	document.addEventListener('DOMContentLoaded', init); // astro:page-load
 </script>

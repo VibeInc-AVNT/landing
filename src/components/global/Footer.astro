@@ -70,21 +70,13 @@ const translatePath = useTranslatedPath(lang);
 </style>
 
 <script>
-	import { gsap } from "gsap";
-	import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-
-	gsap.registerPlugin(ScrollToPlugin);
-
+	// Simple smooth scroll to top without GSAP
 	function init() {
-		var goTopButton = document.getElementById("go-top-button");
-
+		const goTopButton = document.getElementById('go-top-button');
 		if (!goTopButton) return;
-
-		goTopButton.addEventListener("click", function () {
-			gsap.to(window, { duration: 0.5, scrollTo: 0 });
-		});
+		goTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 	}
 
-	document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-	document.addEventListener("DOMContentLoaded", init); // astro:page-load
+	document.removeEventListener('DOMContentLoaded', init); // astro:page-load
+	document.addEventListener('DOMContentLoaded', init); // astro:page-load
 </script>

@@ -89,61 +89,49 @@ const translatePath = useTranslatedPath(lang);
 </style>
 
 <script>
-	import { gsap } from "gsap";
-	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { SplitText } from "gsap/SplitText";
-	import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-
-	gsap.registerPlugin(ScrollTrigger, SplitText, ScrollToPlugin);
-
+	// Lightweight hero entrance and rotator replacement (no GSAP)
 	function init() {
-		const childSplit = new SplitText(".hero h1", {
-			type: "lines",
-			linesClass: "split-child",
-		});
-		const parentSplit = new SplitText(".hero h1", {
-			linesClass: "split-parent",
-		});
+		const heroH1 = document.querySelector('.hero h1');
+		if (heroH1) {
+			// Reveal the h1
+			heroH1.style.visibility = 'visible';
+			heroH1.style.transition = 'transform 800ms cubic-bezier(.22,.9,.18,1), opacity 800ms';
+			heroH1.style.transform = 'translateY(0)';
+			heroH1.style.opacity = '1';
+		}
 
-		gsap.timeline()
-			.from(childSplit.lines, {
-				duration: 1.5,
-				yPercent: 100,
-				ease: "power4",
-				stagger: 0.1,
-			})
-			.set(".hero h1", { visibility: "visible" }, "<")
-			.then(() => {
-				const words = document.querySelectorAll(".hero .rotator > span");
-
-				let rotatorTimeline = gsap.timeline({ repeat: -1 });
-				rotatorTimeline.timeScale(0.5);
-
-				for (let i = 0; i < words.length; i++) {
-					let delay = i - 1;
-					let wordTL = gsap.timeline();
-					if (i !== 0) {
-						gsap.set(words[i], { opacity: 1 });
-						wordTL.from(words[i], { duration: 1, yPercent: 100, opacity: 0, ease: "power4.out" });
-					} else {
-						// Handle the first one specially
-						delay += 1;
-						gsap.set(words[0], { opacity: 1, yPercent: 0 });
-					}
-
-					if (i !== words.length - 1) {
-						wordTL.to(words[i], { duration: 1, yPercent: -100, opacity: 0, ease: "power4.out" });
-					}
-					rotatorTimeline.add(wordTL, delay);
+		// Rotator fallback
+		const words = document.querySelectorAll('.hero .rotator > span');
+		if (words.length) {
+			words.forEach((w, i) => {
+				w.style.transition = 'opacity 600ms, transform 600ms';
+				if (i !== 0) {
+					w.style.opacity = '0';
+					w.style.transform = 'translateY(100%)';
+				} else {
+					w.style.opacity = '1';
+					w.style.transform = 'translateY(0)';
 				}
 			});
 
-		var goProjectsButton = document.getElementById("go-projects-button");
-		goProjectsButton?.addEventListener("click", function () {
-			gsap.to(window, { duration: 0.5, scrollTo: "#projects" });
+			let idx = 0;
+			setInterval(() => {
+				const next = (idx + 1) % words.length;
+				words[idx].style.opacity = '0';
+				words[idx].style.transform = 'translateY(-100%)';
+				words[next].style.opacity = '1';
+				words[next].style.transform = 'translateY(0)';
+				idx = next;
+			}, 2500);
+		}
+
+		const goProjectsButton = document.getElementById('go-projects-button');
+		goProjectsButton?.addEventListener('click', function () {
+			const target = document.querySelector('#projects');
+			target?.scrollIntoView({ behavior: 'smooth' });
 		});
 	}
 
-	document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-	document.addEventListener("DOMContentLoaded", init); // astro:page-load
+	document.removeEventListener('DOMContentLoaded', init); // astro:page-load
+	document.addEventListener('DOMContentLoaded', init); // astro:page-load
 </script>

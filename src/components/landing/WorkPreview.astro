@@ -57,59 +57,58 @@ const allProjects = (await getCollection("projects"))
 </style>
 
 <script>
-	import { gsap } from "gsap";
-	import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-	gsap.registerPlugin(ScrollTrigger);
-
+	// GSAP-free fallbacks for preview clipping, background change and project parallax
 	function init() {
-		const projects = gsap.utils.toArray(".work-preview-section ol li") as gsap.DOMTarget[];
-		const previews = gsap.utils.toArray(".work-preview-section ol li img") as gsap.DOMTarget[];
-		previews.forEach((preview) => {
-			gsap.from(preview, {
-				scrollTrigger: {
-					trigger: preview,
-					start: "top bottom",
-					end: "center center",
-					scrub: 1,
-					markers: false,
-				},
-				ease: "power3.out",
-				"--clip": "30%",
+		const previews = Array.from(document.querySelectorAll('.work-preview-section ol li img'));
+		const projects = Array.from(document.querySelectorAll('.work-preview-section ol li'));
+		const wrapper = document.querySelector('.work-preview-section');
+
+		const previewObserver = new IntersectionObserver(entries => {
+			entries.forEach(entry => {
+				const el = entry.target;
+				const rect = el.getBoundingClientRect();
+				const winH = window.innerHeight || document.documentElement.clientHeight;
+				const progress = Math.max(0, Math.min(1, (winH - rect.top) / (rect.height + winH)));
+				const clipVal = Math.max(0, 30 * (1 - progress));
+				el.style.setProperty('--clip', `${clipVal}%`);
 			});
-		});
+		}, { threshold: Array.from({ length: 11 }, (_, i) => i / 10) });
 
-		gsap.to(".home-dark-section", {
-			scrollTrigger: {
-				trigger: ".work-preview-section",
-				start: "bottom bottom",
-				end: "bottom 70%",
-				scrub: 0.5,
-				markers: false,
-				immediateRender: false,
-			},
-			ease: "none",
-			backgroundColor: "#18181b",
-			color: "#fff",
-		});
+		previews.forEach(p => previewObserver.observe(p));
 
+		// Background color toggle for the work-preview-section
+		const bgObserver = new IntersectionObserver(entries => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					wrapper?.classList.add('scrolled-in');
+				} else {
+					wrapper?.classList.remove('scrolled-in');
+				}
+			});
+		}, { threshold: 0.5 });
+		if (wrapper) bgObserver.observe(wrapper);
+
+		// Simple parallax for large screens
 		if (window.innerWidth >= 768) {
-			projects.forEach((project) => {
-				gsap.to(project, {
-					scrollTrigger: {
-						trigger: ".work-preview-section ol",
-						start: "top bottom",
-						end: "bottom center",
-						scrub: 1,
-						markers: false,
-					},
-					ease: "none",
-					y: `-200px`,
+			let ticking = false;
+			function onScroll() {
+				if (ticking) return;
+				ticking = true;
+				requestAnimationFrame(() => {
+					const rect = wrapper.getBoundingClientRect();
+					const winH = window.innerHeight || document.documentElement.clientHeight;
+					const progress = Math.max(0, Math.min(1, (winH - rect.top) / (rect.height + winH)));
+					const y = -200 * progress;
+					projects.forEach(p => { p.style.transform = `translateY(${y}px)`; p.style.transition = 'transform 200ms linear'; });
+					ticking = false;
 				});
-			});
+			}
+
+			document.addEventListener('scroll', onScroll, { passive: true });
+			onScroll();
 		}
 	}
 
-	document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-	document.addEventListener("DOMContentLoaded", init); // astro:page-load
+	document.removeEventListener('DOMContentLoaded', init); // astro:page-load
+	document.addEventListener('DOMContentLoaded', init); // astro:page-load
 </script>

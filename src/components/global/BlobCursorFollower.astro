@@ -3,71 +3,78 @@
 </div>
 
 <script>
-	import { gsap, Power2 } from "gsap";
-
+	// Vanilla replacement for the previous GSAP-powered cursor follower
 	function init() {
 		const isTouchDevice = window.matchMedia("(hover: none)").matches;
 
 		if (isTouchDevice) return;
 
-		var mouse = { x: 0, y: 0 };
-		var pos = { x: 0, y: 0 };
-		var ratio = 0.65;
-		var blob = document.getElementById("blob");
-		var magicCursor = document.getElementById("cursor-follower");
+		const mouse = { x: 0, y: 0 };
+		const pos = { x: 0, y: 0 };
+		const ratio = 0.65;
+		const blob = document.getElementById("blob");
+		const magicCursor = document.getElementById("cursor-follower");
 
 		if (!blob || !magicCursor) return;
 
-		gsap.set(blob, { xPercent: -50, yPercent: -50 });
+		// center the blob by default and keep scale from CSS
+		blob.style.transform = 'translate(-50%, -50%) scale(0.5)';
 
-		document.addEventListener("mousemove", mouseMove);
+		let rafId = null;
 
 		function updatePosition() {
 			pos.x += (mouse.x - pos.x) * ratio;
 			pos.y += (mouse.y - pos.y) * ratio;
-			gsap.to(blob, { duration: 0.5, x: pos.x, y: pos.y });
+
+			blob.style.left = pos.x + 'px';
+			blob.style.top = pos.y + 'px';
+
+			rafId = requestAnimationFrame(updatePosition);
 		}
 
-		function mouseMove(e: MouseEvent) {
-			var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		function mouseMove(e) {
+			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 			mouse.x = e.pageX;
 			mouse.y = e.pageY - scrollTop;
 		}
 
-		gsap.ticker.add(updatePosition);
+		document.addEventListener('mousemove', mouseMove);
+		updatePosition();
 
-		let parallaxWraps = document.querySelectorAll("[data-cursor-hover]");
+		const parallaxWraps = document.querySelectorAll("[data-cursor-hover]");
 
 		parallaxWraps.forEach(function (wrap) {
-			function magneticElement(e: MouseEvent, target: HTMLElement, movement: number) {
-				var boundingRect = target.getBoundingClientRect();
-				var relX = e.pageX - boundingRect.left;
-				var relY = e.pageY - boundingRect.top;
-				var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+			function magneticElement(e, target, movement) {
+				const boundingRect = target.getBoundingClientRect();
+				const relX = e.pageX - boundingRect.left;
+				const relY = e.pageY - boundingRect.top;
+				const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-				gsap.to(target, {
-					duration: 0.3,
-					x: ((relX - boundingRect.width / 2) / boundingRect.width) * movement,
-					y: ((relY - boundingRect.height / 2 - scrollTop) / boundingRect.height) * movement,
-					ease: Power2.easeOut,
-				});
+				const x = ((relX - boundingRect.width / 2) / boundingRect.width) * movement;
+				const y = ((relY - boundingRect.height / 2 - scrollTop) / boundingRect.height) * movement;
+
+				target.style.transition = 'transform 0.3s ease-out';
+				target.style.transform = `translate(${x}px, ${y}px)`;
 			}
 
-			wrap.addEventListener("mouseenter", function (e) {
-				gsap.to(blob, { duration: 0.5, opacity: 0.5 });
+			wrap.addEventListener("mouseenter", function () {
+				blob.style.transition = 'opacity 0.5s';
+				blob.style.opacity = '0.5';
 			});
 
-			wrap.addEventListener("mouseleave", function (e) {
-				gsap.to(blob, { duration: 0.5, opacity: 0.2 });
+			wrap.addEventListener("mouseleave", function () {
+				blob.style.transition = 'opacity 0.5s';
+				blob.style.opacity = '0.2';
 
 				if (wrap && wrap.hasAttribute("data-cursor-parallax")) {
-					gsap.to(wrap, { duration: 0.3, scale: 1, x: 0, y: 0 });
+					wrap.style.transition = 'transform 0.3s';
+					wrap.style.transform = '';
 				}
 			});
 
 			wrap.addEventListener("mousemove", function (e) {
 				if (wrap && wrap.hasAttribute("data-cursor-parallax")) {
-					magneticElement(e as MouseEvent, wrap as HTMLElement, 10);
+					magneticElement(e, wrap, 10);
 				}
 			});
 		});
