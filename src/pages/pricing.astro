@@ -1,0 +1,20 @@
+---
+import Pricing from "@/components/landing/Pricing.astro";
+import Cta from "@/components/landing/Cta.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { AstroSeoProps } from "@astrolib/seo";
+
+const seo: AstroSeoProps = {
+	title: "Pricing - Vibe Cache: Plans for Every Scale",
+	description:
+		"Simple, transparent pricing for Vibe Cache. Start free, scale as you grow. Reduce AI costs by 70% with semantic caching.",
+	canonical: "https://vibe.avunite.com/pricing/",
+};
+---
+
+<BaseLayout seo={seo}>
+	<div class="pt-20">
+		<Pricing />
+	</div>
+	<Cta />
+</BaseLayout>
