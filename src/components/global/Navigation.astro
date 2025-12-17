@@ -36,7 +36,7 @@ const { pathname } = Astro.url;
 				<div
 					class="nav-container relative mx-auto flex w-full flex-col justify-center overflow-x-hidden rounded-xl border border-gray-200 bg-white/80 shadow-sm backdrop-blur-xl dark:border-vibe-purple-700 dark:bg-vibe-purple-800/80 md:flex-row-reverse">
 					<div class="flex flex-row items-center justify-end md:hidden">
-						<a class="px-3 py-[0.4rem] pl-4 text-vibe-purple transition-colors hover:text-vibe-purple-600 dark:text-vibe-yellow dark:hover:text-vibe-yellow-400" href={translatePath("/contact/")} aria-label="Contact Page">
+						<a class="px-3 py-[0.4rem] pl-4 text-vibe-purple transition-colors hover:text-vibe-purple-600 dark:text-vibe-yellow dark:hover:text-vibe-yellow-400" href="mailto:support@avunite.com" aria-label="Contact Email">
 							<Icon class="" name="octicon:mail-16" width="20" data-xbind.class="{'hidden': open}" />
 						</a>
 						<button
@@ -100,7 +100,7 @@ const { pathname } = Astro.url;
 							</li>
 							<li class="hidden md:block">
 								<a
-									href={translatePath("/contact/")}
+								href="mailto:support@avunite.com"
 									class="ml-2 inline-flex items-center justify-center rounded-lg bg-vibe-purple px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-vibe-purple-600 dark:bg-vibe-yellow dark:text-vibe-purple-900 dark:hover:bg-vibe-yellow-400">
 									{t("nav.getstarted")}
 								</a>
