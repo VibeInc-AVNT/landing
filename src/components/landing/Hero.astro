@@ -5,7 +5,6 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
-const words = ["Thought", "Light", "Memory", "Cache"];
 ---
 
 <section id="hero" class="section hero relative min-h-screen overflow-hidden bg-white dark:bg-vibe-purple-900">
@@ -14,26 +13,9 @@ const words = ["Thought", "Light", "Memory", "Cache"];
 
 			<!-- Main headline -->
 			<div class="hero-content flex justify-center">
-				<h1 class="hero-title text-center font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">
+				<h1 class="hero-title text-center font-display text-5xl font-extrabold leading-[0.9] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">
 					<span class="block overflow-hidden">
-						<span class="line-1 inline-block text-gray-900 dark:text-white">AI Inference</span>
-					</span>
-					<span class="block overflow-hidden">
-						<span class="line-2 inline-block text-vibe-purple dark:text-vibe-indigo">at the Speed of</span>
-					</span>
-					<span class="block overflow-hidden">
-						<span class="line-3 inline-block text-vibe-yellow dark:text-vibe-yellow">
-							<span class="word-carousel">
-								{words.map((word, i) => (
-									<span
-										class="carousel-word"
-										data-index={i}
-									>
-										{word}
-									</span>
-								))}
-							</span>
-						</span>
+						<span class="line-1 inline-block text-gray-900 dark:text-white">{t("hero.title.main")}</span>
 					</span>
 				</h1>
 			</div>
@@ -41,9 +23,7 @@ const words = ["Thought", "Light", "Memory", "Cache"];
 			<!-- Subtitle -->
 			<div class="hero-subtitle mt-8 flex flex-col items-center gap-8 text-center lg:mt-12">
 				<p class="max-w-2xl text-lg text-gray-600 dark:text-gray-300 md:text-xl lg:text-2xl">
-					The intelligent caching layer that understands meaning.<br class="hidden sm:block" />
-					<span class="font-semibold text-vibe-purple dark:text-vibe-yellow">Reduce latency by 40×.</span>
-					<span class="font-semibold text-vibe-orange">Cut costs by 70%.</span>
+					{t("hero.subtitle")}
 				</p>
 
 				<!-- CTAs -->
@@ -51,7 +31,7 @@ const words = ["Thought", "Light", "Memory", "Cache"];
 					<a
 						href={translatePath("/contact/")}
 						class="group inline-flex items-center gap-2 rounded-lg bg-vibe-purple px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-vibe-purple-600 hover:scale-105 dark:bg-vibe-yellow dark:text-vibe-purple-900 dark:hover:bg-vibe-yellow-400">
-						Start Free Trial
+						{t("hero.cta.primary")}
 						<svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
 						</svg>
@@ -59,20 +39,20 @@ const words = ["Thought", "Light", "Memory", "Cache"];
 					<a
 						href={translatePath("/contact/")}
 						class="inline-flex items-center gap-2 rounded-lg border-2 border-gray-200 px-8 py-4 text-lg font-semibold text-gray-700 transition-all hover:border-vibe-purple hover:text-vibe-purple dark:border-vibe-purple-600 dark:text-gray-300 dark:hover:border-vibe-yellow dark:hover:text-vibe-yellow">
-						Talk to Sales
+						{t("hero.cta.secondary")}
 					</a>
 				</div>
 
 				<!-- Trust text -->
 				<p class="text-sm text-gray-500 dark:text-gray-400">
-					No credit card required · 14-day free trial · Cancel anytime
+					{t("cta.trust")}
 				</p>
 			</div>
 
 			<!-- Scroll indicator -->
 			<div class="hero-scroll mt-16 flex justify-center lg:mt-20">
 				<button id="scroll-to-content" class="flex flex-col items-center gap-2 text-gray-400 transition-colors hover:text-vibe-purple dark:hover:text-vibe-yellow">
-					<span class="text-sm">Explore</span>
+					<span class="text-sm">{t("hero.scroll")}</span>
 					<svg class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
 					</svg>
@@ -107,27 +87,6 @@ const words = ["Thought", "Light", "Memory", "Cache"];
 		transform: translateY(30px);
 	}
 
-	/* Word carousel - grid stacking */
-	.word-carousel {
-		display: grid;
-	}
-
-	.carousel-word {
-		grid-area: 1 / 1;
-		opacity: 0;
-		transform: translateY(100%);
-		transition: opacity 0.5s ease, transform 0.5s ease;
-	}
-
-	.carousel-word.active {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
-	.carousel-word.exit {
-		opacity: 0;
-		transform: translateY(-100%);
-	}
 
 	/* Animation keyframes */
 	@keyframes slideUp {
@@ -184,40 +143,12 @@ const words = ["Thought", "Light", "Memory", "Cache"];
 			}, 100);
 		}
 
-		// Word carousel
-		const words = document.querySelectorAll('.carousel-word');
-		if (words.length > 0) {
-			let currentIndex = 0;
 
-			// Set first word as active after line-3 animation completes (0.1s delay + 0.3s start + 0.8s duration = 1.2s)
-			setTimeout(() => {
-				words[0].classList.add('active');
-			}, 1200);
-
-			// Start rotating words after first word is shown
-			setTimeout(() => {
-				setInterval(() => {
-					const current = words[currentIndex];
-					const nextIndex = (currentIndex + 1) % words.length;
-					const next = words[nextIndex];
-
-					current.classList.remove('active');
-					current.classList.add('exit');
-
-					setTimeout(() => {
-						current.classList.remove('exit');
-						next.classList.add('active');
-					}, 500);
-
-					currentIndex = nextIndex;
-				}, 2500);
-			}, 1200);
-		}
 
 		// Scroll button
 		const scrollBtn = document.getElementById('scroll-to-content');
 		scrollBtn?.addEventListener('click', () => {
-			const nextSection = document.getElementById('how-it-works');
+			const nextSection = document.getElementById('problem');
 			nextSection?.scrollIntoView({ behavior: 'smooth' });
 		});
 	}
