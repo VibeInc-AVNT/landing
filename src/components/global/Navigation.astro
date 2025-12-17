@@ -15,16 +15,6 @@ let pages = [
 		url: "/#features",
 		isAnchor: true,
 	},
-	{
-		title: t("nav.pricing"),
-		url: "/pricing/",
-		isAnchor: false,
-	},
-	{
-		title: t("nav.faq"),
-		url: "/#faq",
-		isAnchor: true,
-	},
 ];
 
 const { pathname } = Astro.url;
@@ -37,10 +27,7 @@ const { pathname } = Astro.url;
 				<circle cx="20" cy="20" r="18" class="stroke-vibe-purple dark:stroke-vibe-yellow" stroke-width="2.5"/>
 				<path d="M14 25L20 12L26 25L20 21L14 25Z" class="fill-vibe-purple dark:fill-vibe-yellow"/>
 			</svg>
-			<span class="font-display text-xl font-bold tracking-tight md:text-2xl">
-				<span class="text-vibe-purple dark:text-vibe-yellow">Vibe</span>
-				<span class="text-gray-900 dark:text-white"> Cache</span>
-			</span>
+			<span class="font-display text-xl font-bold tracking-tight md:text-2xl text-gray-900 dark:text-white">Vibe</span>
 		</div>
 	</a>
 	<div data-xdata="{ open: false }" class="navigation fixed right-0 top-0 z-50" data-xbind.class="{'w-full navbar-open': open}">

@@ -20,13 +20,13 @@ const lang = getLangFromUrl(Astro.url);
 const shareImage = new URL("/images/meta/vibe_share.png", Astro.site).toString();
 
 const defaultSeo: AstroSeoProps = {
-	title: "Vibe Cache - AI Inference at the Speed of Thought",
+	title: "Vibe - Semantic Caching for AI",
 	description:
 		"The intelligent caching layer that understands meaning. Reduce latency by 40×. Cut costs by 70%. Semantic caching for LLM applications.",
 	canonical: "https://vibe.avunite.com",
 	openGraph: {
 		url: "https://vibe.avunite.com",
-		title: "Vibe Cache - AI Inference at the Speed of Thought",
+		title: "Vibe - Semantic Caching for AI",
 		description:
 			"The intelligent caching layer that understands meaning. Reduce latency by 40×. Cut costs by 70%. Semantic caching for LLM applications.",
 		images: [
@@ -34,11 +34,11 @@ const defaultSeo: AstroSeoProps = {
 				url: shareImage,
 				width: 1200,
 				height: 630,
-				alt: "Vibe Cache - Semantic AI Caching",
+				alt: "Vibe - Semantic AI Caching",
 				type: "image/png",
 			},
 		],
-		site_name: "Vibe Cache",
+		site_name: "Vibe",
 	},
 	twitter: {
 		handle: "@vibecache",
@@ -48,7 +48,7 @@ const defaultSeo: AstroSeoProps = {
 	additionalMetaTags: [
 		{
 			name: "publisher",
-			content: "Vibe Cache",
+			content: "Vibe",
 		},
 		{
 			name: "keywords",

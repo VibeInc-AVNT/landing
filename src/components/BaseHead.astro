@@ -17,8 +17,22 @@ import "../styles/global.css";
 <link rel="icon" type="image/png" sizes="512x512" href="/pwa-512x512.png" />
 <link rel="manifest" href="/manifest.webmanifest" />
 <link rel="mask-icon" href="/maskable-icon.png" color="#000000" />
-<meta name="msapplication-TileColor" content="#000000" />
-<meta name="theme-color" content="#000000" />
+<meta name="msapplication-TileColor" content="#ffffff" />
+<meta name="theme-color" content="#ffffff" />
+
+<script is:inline>
+	(function () {
+		try {
+			const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+			const stored = (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) || null;
+			const theme = stored ? stored : (prefersDark ? 'dark' : 'light');
+			if (theme === 'dark') document.documentElement.classList.add('dark');
+			else document.documentElement.classList.remove('dark');
+			const meta = document.querySelector('meta[name="theme-color"]');
+			if (meta) meta.setAttribute('content', theme === 'dark' ? '#0f172a' : '#ffffff');
+		} catch (e) {}
+	})();
+</script>
 
 <!-- HTML in your document's head -->
 <link rel="preconnect" href="https://rsms.me/" />

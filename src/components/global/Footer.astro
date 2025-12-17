@@ -8,34 +8,16 @@ const translatePath = useTranslatedPath(lang);
 
 const productLinks = [
 	{ label: "Features", href: "/#features" },
-	{ label: "Pricing", href: translatePath("/pricing/") },
-	{ label: "Documentation", href: "#" },
-	{ label: "API Reference", href: "#" },
-	{ label: "Status", href: "#" },
 ];
 
 const companyLinks = [
-	{ label: "About", href: "#" },
 	{ label: "Blog", href: translatePath("/blog/") },
-	{ label: "Careers", href: "#" },
-	{ label: "Press", href: "#" },
 	{ label: "Contact", href: translatePath("/contact/") },
-];
-
-const resourceLinks = [
-	{ label: "Getting Started", href: "#" },
-	{ label: "Tutorials", href: "#" },
-	{ label: "Case Studies", href: "#" },
-	{ label: "Changelog", href: "#" },
-	{ label: "Community", href: "#" },
 ];
 
 const legalLinks = [
 	{ label: "Privacy Policy", href: translatePath("/privacy/") },
 	{ label: "Terms of Service", href: translatePath("/terms/") },
-	{ label: "Security", href: "#" },
-	{ label: "GDPR", href: "#" },
-	{ label: "SOC 2", href: "#" },
 ];
 ---
 
@@ -50,14 +32,11 @@ const legalLinks = [
 						<circle cx="20" cy="20" r="18" class="stroke-vibe-purple dark:stroke-vibe-yellow" stroke-width="2.5"/>
 						<path d="M14 25L20 12L26 25L20 21L14 25Z" class="fill-vibe-purple dark:fill-vibe-yellow"/>
 					</svg>
-					<span class="font-display text-2xl font-bold tracking-tight">
-						<span class="text-vibe-purple dark:text-vibe-yellow">Vibe</span>
-						<span class="text-gray-900 dark:text-white"> Cache</span>
-					</span>
+					<span class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Vibe</span>
 				</a>
 
 				<p class="mt-4 max-w-xs text-gray-600 dark:text-gray-400">
-					The intelligent caching layer that understands meaning. Reduce latency by 40×. Cut costs by 70%.
+					Semantic caching for AI. Faster responses. Lower costs.
 				</p>
 
 				<!-- Status indicator -->
@@ -87,7 +66,7 @@ const legalLinks = [
 			</div>
 
 			<!-- Links columns -->
-			<div class="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8">
+			<div class="grid grid-cols-3 gap-8 lg:col-span-8">
 				<!-- Product -->
 				<div>
 					<h4 class="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">{t("footer.product")}</h4>
@@ -116,20 +95,6 @@ const legalLinks = [
 					</ul>
 				</div>
 
-				<!-- Resources -->
-				<div>
-					<h4 class="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">{t("footer.resources")}</h4>
-					<ul class="space-y-3">
-						{resourceLinks.map((link) => (
-							<li>
-								<a href={link.href} class="text-sm text-gray-600 transition-colors hover:text-vibe-purple dark:text-gray-400 dark:hover:text-vibe-yellow">
-									{link.label}
-								</a>
-							</li>
-						))}
-					</ul>
-				</div>
-
 				<!-- Legal -->
 				<div>
 					<h4 class="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">{t("footer.legal")}</h4>
@@ -149,7 +114,7 @@ const legalLinks = [
 		<!-- Bottom bar -->
 		<div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-gray-200 pt-8 dark:border-vibe-purple-700 sm:flex-row">
 			<p class="text-sm text-gray-500 dark:text-gray-400">
-				&copy; {new Date().getFullYear()} Vibe Cache. All rights reserved.
+				&copy; {new Date().getFullYear()} Vibe. All rights reserved.
 			</p>
 
 			<button

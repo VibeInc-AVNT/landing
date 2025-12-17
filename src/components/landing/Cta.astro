@@ -21,40 +21,17 @@ const translatePath = useTranslatedPath(lang);
 				{t("cta.subtitle")}
 			</p>
 
-			<!-- CTA buttons -->
-			<div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+			<!-- Single CTA button -->
+			<div class="mt-10 flex items-center justify-center">
 				<a
 					href={translatePath("/contact/")}
 					class="cta-btn group inline-flex items-center gap-2 rounded-lg bg-vibe-yellow px-8 py-4 text-lg font-semibold text-vibe-purple-900 transition-all hover:bg-vibe-yellow-400"
 				>
-					{t("cta.primary")}
+					{t("contact")}
 					<svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
 					</svg>
 				</a>
-				<a
-					href={translatePath("/contact/")}
-					class="cta-btn inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-4 text-lg font-semibold text-white transition-all hover:border-white hover:bg-white/10"
-				>
-					{t("cta.secondary")}
-				</a>
-			</div>
-
-			<!-- Trust badges -->
-			<p class="mt-8 text-sm text-vibe-purple-200">
-				{t("cta.trust")}
-			</p>
-
-			<!-- Company logos placeholder -->
-			<div class="mt-16">
-				<p class="mb-6 text-sm font-medium uppercase tracking-wider text-vibe-purple-200">
-					Trusted by innovative teams
-				</p>
-				<div class="flex flex-wrap items-center justify-center gap-8 opacity-60">
-					{[1, 2, 3, 4, 5].map(() => (
-						<div class="h-8 w-24 rounded bg-white/20"></div>
-					))}
-				</div>
 			</div>
 		</div>
 	</div>
