@@ -40,206 +40,107 @@ const faqs = [
 		question: t("faqs.question8"),
 		answer: t("faqs.answer8"),
 	},
-	{
-		question: t("faqs.question9"),
-		answer: t("faqs.answer9"),
-	},
-	{
-		question: t("faqs.question10"),
-		answer: t("faqs.answer10"),
-	},
 ];
 ---
 
-<section id="faq" class:list={["section faq-section relative bg-zinc-900 text-white", className]}>
-	<div class="wrapper col-span-12 flex min-h-screen w-full flex-col py-32 md:flex-row">
-		<div class="title-container top-0 pt-10 md:sticky md:h-[30rem]">
-			<h2 class="font-display text-5xl md:text-6xl lg:text-8xl">FAQ</h2>
-		</div>
-		<div class="faq-list flex grow flex-col items-stretch px-0 pt-10 md:px-20 lg:px-40">
-			<!-- https://codepen.io/frogmcw/pen/deqRwa -->
-			<div class="hidden">
-				<svg xmlns="http://www.w3.org/2000/svg">
-					<symbol viewBox="0 0 24 24" id="expand-more">
-						<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path><path d="M0 0h24v24H0z" fill="none"></path>
-					</symbol>
-					<symbol viewBox="0 0 24 24" id="close">
-						<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path><path
-							d="M0 0h24v24H0z"
-							fill="none">
-						</path>
-					</symbol>
-				</svg>
+<section id="faq" class:list={["section relative bg-white py-24 dark:bg-vibe-purple-900 lg:py-32", className]}>
+	<div class="relative z-10 col-span-12">
+		<div class="mx-auto flex max-w-5xl flex-col gap-12 lg:flex-row lg:gap-16">
+			<!-- Left column - Title -->
+			<div class="lg:sticky lg:top-32 lg:h-fit lg:w-1/3">
+				<h2 class="font-display text-4xl font-bold uppercase text-gray-900 dark:text-white md:text-5xl">
+					FAQ
+				</h2>
+				<p class="mt-4 text-gray-600 dark:text-gray-400">
+					Everything you need to know about Vibe Cache. Can't find the answer you're looking for?
+				</p>
+				<a
+					href={translatePath("/contact/")}
+					class="mt-6 inline-flex items-center gap-2 text-vibe-purple transition-colors hover:text-vibe-purple-600 dark:text-vibe-yellow dark:hover:text-vibe-yellow-400"
+				>
+					{t("faq.otherquestions")}
+					<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+					</svg>
+				</a>
 			</div>
 
-			{
-				faqs.map(({ question, answer }) => (
-					<details class="relative min-h-1 grow rounded-md border-zinc-800 bg-zinc-800 text-lg transition-all">
-						<summary class="gap-4 px-11 py-11">
-							{question}
-							<svg class="control-icon control-icon-expand" width="24" height="24" role="presentation">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#expand-more" />
-							</svg>
-							<svg class="control-icon control-icon-close" width="24" height="24" role="presentation">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close" />
-							</svg>
+			<!-- Right column - FAQ items -->
+			<div class="flex-1 space-y-3">
+				{faqs.map((faq, i) => (
+					<details
+						class="faq-item group rounded-xl border border-gray-200 bg-white transition-all dark:border-vibe-purple-700 dark:bg-vibe-purple-800/50"
+						style={`animation-delay: ${i * 0.05}s;`}
+					>
+						<summary class="flex cursor-pointer items-center justify-between gap-4 p-5 font-medium text-gray-900 dark:text-white">
+							<span class="text-left">{faq.question}</span>
+							<span class="flex-shrink-0 rounded-full bg-gray-100 p-2 transition-colors group-open:bg-vibe-purple/10 dark:bg-vibe-purple-700 dark:group-open:bg-vibe-yellow/20">
+								<svg
+									class="h-4 w-4 text-gray-500 transition-transform duration-200 group-open:rotate-45 group-open:text-vibe-purple dark:text-gray-400 dark:group-open:text-vibe-yellow"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+								</svg>
+							</span>
 						</summary>
-						<p class="px-11 pb-11 font-light text-zinc-200">{answer}</p>
+						<div class="border-t border-gray-100 px-5 pb-5 pt-4 dark:border-vibe-purple-700">
+							<p class="text-gray-600 dark:text-gray-400">{faq.answer}</p>
+						</div>
 					</details>
-				))
-			}
-		</div>
-	</div>
-	<div class="faq-more-questions col-span-12 flex flex-col items-center justify-center gap-8 pb-32">
-		<div class="flex gap-10">
-			<span class="other-question-title opacity-0">{t("faq.otherquestions")}</span>
-			<svg
-				fill="transparent"
-				stroke="#fff"
-				stroke-width="40px"
-				width="40"
-				height="40"
-				xmlns="http://www.w3.org/2000/svg"
-				xmlns:xlink="http://www.w3.org/1999/xlink"
-				viewBox="0 0 800 800"
-				xml:space="preserve">
-				<g>
-					<path
-						id="faq-more-question-path"
-						d="M779.3,519.1c-16.3,0-31,0-47.3-1.6c62-154.9,101.1-415.9-112.5-458.3C569,47.8,520,54.3,485.8,82
-		c-58.7-35.9-132.1-53.8-195.7-45.7c-42.4,4.9-71.8,32.6-89.7,68.5c-39.1-13-81.5-17.9-110.9-4.9C-21.4,147.3-29.5,294,66.7,362.5
-		c9.8,6.5,17.9-6.5,11.4-14.7C-1.8,259.8,40.6,82,180.8,139.1c1.6,1.6,4.9,1.6,6.5,3.3c-11.4,44-8.2,94.6,11.4,130.5
-		c42.4,78.3,145.1,26.1,125.6-53.8c-9.8-37.5-45.7-73.4-89.7-96.2c13-26.1,34.2-45.7,70.1-47.3c48.9-1.6,99.5,9.8,141.9,34.2
-		c4.9,3.3,8.2,4.9,13,8.2c-4.9,11.4-9.8,24.5-13,39.1c-9.8,48.9,1.6,146.8,55.4,171.2c66.9,29.4,102.7-75,84.8-123.9
-		c-13-37.5-39.1-70.1-70.1-96.2c13-9.8,31-14.7,53.8-13c225,16.3,177.8,274,119.1,422.4c-16.3-1.6-34.2-4.9-52.2-6.5
-		c-3.3,0-6.5,0-8.2,1.6c-9.8-8.2-27.7-4.9-27.7,11.4c-3.3,71.8,21.2,156.6,40.8,226.7c4.9,16.3,31,21.2,39.1,4.9
-		c35.9-70.1,76.6-135.4,115.8-203.8C805.4,538.7,794,519.1,779.3,519.1z M285.2,220.6c21.2,52.2-47.3,65.2-58.7,26.1
-		c-4.9-16.3-8.2-34.2-8.2-52.2c0-11.4,1.6-22.8,3.3-34.2C247.7,175,272.2,196.2,285.2,220.6z M492.3,135.8
-		c27.7,19.6,50.6,45.7,57.1,76.6c1.6,11.4,1.6,83.2-24.5,81.5c-34.2-1.6-44-83.2-44-106C480.9,170.1,484.2,152.2,492.3,135.8z
-		 M642.4,540.3c32.6,8.2,66.9,14.7,101.1,19.6c-24.5,40.8-48.9,81.5-71.8,123.9C663.6,634.9,657,584.3,642.4,540.3z">
-					</path>
-				</g>
-			</svg>
-		</div>
-		<div class="faq-contact-us-button squircle-bg-white rounded-lg bg-zinc-200 opacity-0 sm:ml-44" data-cursor-hover data-cursor-parallax>
-			<a
-				class="flex h-10 w-full max-w-52 flex-1 items-center justify-center px-4 py-2 text-xl text-zinc-900 transition-all hover:text-black sm:w-auto md:font-bold lg:h-10"
-				href={translatePath("/contact/")}>
-				{t("contactus")}
-			</a>
+				))}
+			</div>
 		</div>
 	</div>
 </section>
 
 <style>
-	details + details {
-		margin-top: 20px;
+	.faq-item {
+		animation: fadeInUp 0.5s ease-out both;
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(15px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	details summary::-webkit-details-marker {
+		display: none;
 	}
 
 	details[open] {
-		min-height: 50px;
-		box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.2);
-	}
-
-	summary {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		font-weight: 500;
-		cursor: pointer;
-	}
-
-	summary:focus {
-		outline: none;
-	}
-
-	summary:focus::after {
-		content: "";
-		height: 100%;
-		width: 100%;
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
-
-	summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.control-icon {
-		fill: white;
-		transition: 0.3s ease;
-		pointer-events: none;
-	}
-
-	.control-icon-close {
-		display: none;
-	}
-
-	details[open] .control-icon-close {
-		display: initial;
-		transition: 0.3s ease;
-	}
-
-	details[open] .control-icon-expand {
-		display: none;
-	}
-</style>
-
-<style is:global>
-	.faq-section {
-		--faq-clip: 0;
-		--faq-radius: 0;
-		clip-path: inset(var(--faq-clip) round var(--faq-radius));
-		margin-top: -1px; /* Fix weird clip path behavior */
+		@apply border-vibe-purple/30 dark:border-vibe-indigo/50;
 	}
 </style>
 
 <script>
-	// Replacements for the previous GSAP scroll animations using IntersectionObserver
 	function init() {
-		const faqSection = document.querySelector('#faq');
-		if (faqSection) {
-			const io = new IntersectionObserver(entries => {
-				entries.forEach(entry => {
+		const items = document.querySelectorAll('.faq-item');
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						faqSection.style.transition = '--faq-clip 800ms ease, --faq-radius 800ms ease';
-						faqSection.style.setProperty('--faq-clip', '2vw');
-						faqSection.style.setProperty('--faq-radius', '5rem');
-					} else {
-						faqSection.style.setProperty('--faq-clip', '0');
-						faqSection.style.setProperty('--faq-radius', '0');
+						(entry.target as HTMLElement).style.animationPlayState = 'running';
 					}
 				});
-			}, { threshold: 0.1 });
+			},
+			{ threshold: 0.1 }
+		);
 
-			io.observe(faqSection);
-		}
-
-		const linePath = document.querySelector('#faq-more-question-path');
-		if (linePath) {
-			const len = linePath.getTotalLength();
-			linePath.style.strokeDasharray = len;
-			linePath.style.strokeDashoffset = len;
-			linePath.style.transition = 'stroke-dashoffset 1800ms linear';
-
-			const io2 = new IntersectionObserver(entries => {
-				entries.forEach(entry => {
-					if (entry.isIntersecting) {
-						linePath.style.strokeDashoffset = '0';
-						const title = document.querySelector('.faq-more-questions .other-question-title');
-						if (title) title.style.opacity = '1';
-						const btn = document.querySelector('.faq-contact-us-button');
-						if (btn) btn.style.opacity = '1';
-					}
-				});
-			}, { threshold: 0.2 });
-
-			io2.observe(document.querySelector('.faq-more-questions'));
-		}
+		items.forEach((item) => {
+			(item as HTMLElement).style.animationPlayState = 'paused';
+			observer.observe(item);
+		});
 	}
 
-	document.removeEventListener('DOMContentLoaded', init); // astro:page-load
-	document.addEventListener('DOMContentLoaded', init); // astro:page-load
+	document.removeEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', init);
 </script>

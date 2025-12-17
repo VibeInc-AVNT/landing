@@ -1,6 +1,4 @@
 ---
-import Title from "@components/global/Title.astro";
-
 import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
@@ -8,83 +6,107 @@ const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 ---
 
-<section class="isolate px-6 py-24 sm:py-32 lg:px-8">
-	<div class="absolute inset-x-0 top-[-10rem] transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
-		<div class="gradient-element"></div>
-	</div>
-	<div class="mx-auto">
-		<Title class="pb-10 pt-20 uppercase" title={t("contact.title")} subtitle={t("contact.subtitle")} />
-		<form data-static-form-name="contact" class="mx-auto max-w-2xl pt-12 lg:pt-20">
-			<div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+<section class="relative isolate min-h-screen bg-white px-6 py-24 dark:bg-vibe-purple-900 sm:py-32 lg:px-8">
+	<div class="relative z-10 mx-auto max-w-3xl">
+		<!-- Header -->
+		<div class="pt-20 text-center">
+			<h1 class="font-display text-4xl font-bold uppercase text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
+				{t("contact.title")}
+			</h1>
+			<p class="mx-auto mt-4 max-w-xl text-lg text-gray-600 dark:text-gray-400">
+				{t("contact.subtitle")}
+			</p>
+		</div>
+
+		<!-- Form -->
+		<form data-static-form-name="contact" class="mx-auto mt-12 max-w-xl lg:mt-16">
+			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
 				<div class="form-field sm:col-span-2">
 					<label for="name" class="form-label">{t("contact.name")}*</label>
-					<input type="text" name="name" id="name" autocomplete="given-name" required />
+					<input type="text" name="name" id="name" autocomplete="given-name" required placeholder="John Doe" />
 				</div>
-				<div class="form-field sm:col-span-2">
+				<div class="form-field">
 					<label for="email" class="form-label">{t("contact.email")}*</label>
-					<input type="email" name="email" id="email" autocomplete="email" required />
+					<input type="email" name="email" id="email" autocomplete="email" required placeholder="john@company.com" />
 				</div>
-				<div class="form-field sm:col-span-2">
+				<div class="form-field">
 					<label for="company" class="form-label">{t("contact.company")}</label>
-					<input type="text" name="company" id="company" autocomplete="organization" />
+					<input type="text" name="company" id="company" autocomplete="organization" placeholder="Acme Inc." />
 				</div>
 				<div class="form-field sm:col-span-2">
 					<label for="message" class="form-label">{t("contact.message")}*</label>
-					<textarea name="message" id="message" rows="4" required></textarea>
+					<textarea name="message" id="message" rows="5" required placeholder="Tell us about your project and how we can help..."></textarea>
 				</div>
-				<div class="flex gap-x-4 sm:col-span-2">
-					<label class="text-sm leading-6 text-gray-600" id="switch-1-label">
+				<div class="flex items-start gap-3 sm:col-span-2">
+					<input type="checkbox" id="privacy" name="privacy" required class="mt-1 h-4 w-4 rounded border-gray-300 bg-white text-vibe-purple focus:ring-vibe-purple dark:border-vibe-purple-600 dark:bg-vibe-purple-800 dark:text-vibe-yellow dark:focus:ring-vibe-yellow" />
+					<label for="privacy" class="text-sm leading-6 text-gray-600 dark:text-gray-400">
 						{t("contact.agree")}
-						<a href="/privacy" class="font-semibold text-slate-800">privacy policy</a>.
+						<a href={translatePath("/privacy/")} class="font-medium text-vibe-purple hover:text-vibe-purple-600 dark:text-vibe-yellow dark:hover:text-vibe-yellow-400">privacy policy</a>.
 					</label>
 				</div>
 			</div>
-			<div class="flex pt-10">
-				<div class="squircle-bg rounded-lg bg-zinc-900">
-					<button
-						type="submit"
-						class="flex h-10 w-full max-w-52 flex-1 items-center justify-center px-4 py-2 text-xl text-slate-200 transition-all hover:text-white sm:w-auto md:font-bold lg:h-10">
-						{t("contact.send")}
-					</button>
-				</div>
+			<div class="mt-8">
+				<button
+					type="submit"
+					class="w-full rounded-lg bg-vibe-purple px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-vibe-purple-600 dark:bg-vibe-yellow dark:text-vibe-purple-900 dark:hover:bg-vibe-yellow-400">
+					{t("contact.send")}
+				</button>
 			</div>
 		</form>
+
+		<!-- Additional contact info -->
+		<div class="mt-16 grid gap-8 border-t border-gray-200 pt-16 dark:border-vibe-purple-700 sm:grid-cols-3">
+			<div class="text-center">
+				<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-vibe-yellow/20">
+					<svg class="h-6 w-6 text-vibe-yellow-700 dark:text-vibe-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+					</svg>
+				</div>
+				<h3 class="text-sm font-semibold text-gray-900 dark:text-white">Email</h3>
+				<a href="mailto:hello@vibecache.com" class="mt-1 text-sm text-gray-600 hover:text-vibe-purple dark:text-gray-400 dark:hover:text-vibe-yellow">
+					hello@vibecache.com
+				</a>
+			</div>
+			<div class="text-center">
+				<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-vibe-purple/20">
+					<svg class="h-6 w-6 text-vibe-purple dark:text-vibe-indigo" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+					</svg>
+				</div>
+				<h3 class="text-sm font-semibold text-gray-900 dark:text-white">Live Chat</h3>
+				<p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Available Mon-Fri, 9am-6pm EST</p>
+			</div>
+			<div class="text-center">
+				<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-vibe-indigo/20">
+					<svg class="h-6 w-6 text-vibe-indigo" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+					</svg>
+				</div>
+				<h3 class="text-sm font-semibold text-gray-900 dark:text-white">Documentation</h3>
+				<a href="#" class="mt-1 text-sm text-gray-600 hover:text-vibe-purple dark:text-gray-400 dark:hover:text-vibe-yellow">
+					docs.vibecache.com
+				</a>
+			</div>
+		</div>
 	</div>
 </section>
 
 <style>
-	.gradient-element {
-		@apply relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem];
-		clip-path: polygon(
-			74.1% 44.1%,
-			100% 61.6%,
-			97.5% 26.9%,
-			85.5% 0.1%,
-			80.7% 2%,
-			72.5% 32.5%,
-			60.2% 62.4%,
-			52.4% 68.1%,
-			47.5% 58.3%,
-			45.2% 34.5%,
-			27.5% 76.7%,
-			0.1% 64.9%,
-			17.9% 100%,
-			27.6% 76.8%,
-			76.1% 97.7%,
-			74.1% 44.1%
-		);
-	}
-
 	.form-field {
 		@apply block;
 	}
 
 	.form-label {
-		@apply flex pl-1 text-sm font-semibold leading-6 text-gray-900;
+		@apply mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300;
 	}
 
-	input,
+	input[type="text"],
+	input[type="email"],
 	textarea {
-		@apply pointer-events-auto relative m-0 w-full cursor-text rounded-lg border-0 bg-slate-200 px-5 py-2 text-xl font-normal not-italic outline-none placeholder:text-gray-400 focus:ring-slate-500;
+		@apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 transition-colors focus:border-vibe-purple focus:outline-none focus:ring-1 focus:ring-vibe-purple dark:border-vibe-purple-600 dark:bg-vibe-purple-800 dark:text-white dark:placeholder-gray-500 dark:focus:border-vibe-yellow dark:focus:ring-vibe-yellow;
+	}
+
+	textarea {
+		@apply resize-none;
 	}
 </style>

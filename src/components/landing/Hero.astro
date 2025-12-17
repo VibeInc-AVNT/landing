@@ -1,137 +1,227 @@
 ---
-import LinkBlend from "@components/global/LinkBlend.astro";
 import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
+
+const words = ["Thought", "Light", "Memory", "Cache"];
 ---
 
-<section id="hero" class="section home-dark-section hero min-h-screen">
-	<div class="mx-auto flex h-full flex-col py-4 lg:py-10">
-		<div class="relative flex flex-1 flex-col justify-around rounded-lg pb-10 pt-20 lg:rounded-2xl">
-			<div class="flex justify-center">
-				<h1 class="text-center font-display text-5xl font-extrabold uppercase sm:text-7xl md:text-8xl lg:text-9xl">
-					<span>{t("hero.title.main")}</span>
-					<span class="rotator relative inline-flex h-20 w-full justify-center md:h-24 lg:h-32">
-						<span>{t("hero.title.1")}</span><span>{t("hero.title.2")}</span><span>{t("hero.title.3")}</span><span>
-							{t("hero.title.4")}
-						</span><span>{t("hero.title.1")}</span>
+<section id="hero" class="section hero relative min-h-screen overflow-hidden bg-white dark:bg-vibe-purple-900">
+	<div class="relative z-10 mx-auto flex h-full flex-col py-4 lg:py-10">
+		<div class="relative flex flex-1 flex-col justify-center pb-10 pt-24 lg:pt-16">
+
+			<!-- Main headline -->
+			<div class="hero-content flex justify-center">
+				<h1 class="hero-title text-center font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">
+					<span class="block overflow-hidden">
+						<span class="line-1 inline-block text-gray-900 dark:text-white">AI Inference</span>
+					</span>
+					<span class="block overflow-hidden">
+						<span class="line-2 inline-block text-vibe-purple dark:text-vibe-indigo">at the Speed of</span>
+					</span>
+					<span class="block overflow-hidden">
+						<span class="line-3 inline-block text-vibe-yellow dark:text-vibe-yellow">
+							<span class="word-carousel">
+								{words.map((word, i) => (
+									<span
+										class="carousel-word"
+										data-index={i}
+									>
+										{word}
+									</span>
+								))}
+							</span>
+						</span>
 					</span>
 				</h1>
 			</div>
-			<div class="flex flex-col items-center gap-5 text-center lg:gap-10">
-				<p class="mt-8 max-w-3xl font-mono lg:text-lg">
-					{t("hero.subtitle")}
-				</p>
-				<div class="flex flex-col items-center justify-center gap-3 lg:col-start-1">
-					<div class="squircle-bg rounded-lg bg-zinc-900" data-cursor-hover data-cursor-parallax>
-						<a
-							class="flex h-10 w-full max-w-52 flex-1 items-center justify-center px-4 py-2 text-xl text-slate-200 transition-all hover:text-white sm:w-auto md:font-bold lg:h-10"
-							aria-label="Contact Page"
-							href={translatePath("/contact/")}>
-							{t("contact")}
-						</a>
-					</div>
 
-					<small>
-						{t("or")}
-						<LinkBlend id="go-projects-button" isButton={true}>{t("hero.scroll")}</LinkBlend>
-					</small>
+			<!-- Subtitle -->
+			<div class="hero-subtitle mt-8 flex flex-col items-center gap-8 text-center lg:mt-12">
+				<p class="max-w-2xl text-lg text-gray-600 dark:text-gray-300 md:text-xl lg:text-2xl">
+					The intelligent caching layer that understands meaning.<br class="hidden sm:block" />
+					<span class="font-semibold text-vibe-purple dark:text-vibe-yellow">Reduce latency by 40×.</span>
+					<span class="font-semibold text-vibe-orange">Cut costs by 70%.</span>
+				</p>
+
+				<!-- CTAs -->
+				<div class="flex flex-col items-center gap-4 sm:flex-row">
+					<a
+						href={translatePath("/contact/")}
+						class="group inline-flex items-center gap-2 rounded-lg bg-vibe-purple px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-vibe-purple-600 hover:scale-105 dark:bg-vibe-yellow dark:text-vibe-purple-900 dark:hover:bg-vibe-yellow-400">
+						Start Free Trial
+						<svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+						</svg>
+					</a>
+					<a
+						href={translatePath("/contact/")}
+						class="inline-flex items-center gap-2 rounded-lg border-2 border-gray-200 px-8 py-4 text-lg font-semibold text-gray-700 transition-all hover:border-vibe-purple hover:text-vibe-purple dark:border-vibe-purple-600 dark:text-gray-300 dark:hover:border-vibe-yellow dark:hover:text-vibe-yellow">
+						Talk to Sales
+					</a>
 				</div>
+
+				<!-- Trust text -->
+				<p class="text-sm text-gray-500 dark:text-gray-400">
+					No credit card required · 14-day free trial · Cancel anytime
+				</p>
+			</div>
+
+			<!-- Scroll indicator -->
+			<div class="hero-scroll mt-16 flex justify-center lg:mt-20">
+				<button id="scroll-to-content" class="flex flex-col items-center gap-2 text-gray-400 transition-colors hover:text-vibe-purple dark:hover:text-vibe-yellow">
+					<span class="text-sm">Explore</span>
+					<svg class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+					</svg>
+				</button>
 			</div>
 		</div>
+	</div>
+
+	<!-- Decorative elements -->
+	<div class="pointer-events-none absolute inset-0 overflow-hidden">
+		<div class="absolute -right-40 -top-40 h-80 w-80 rounded-full bg-vibe-yellow/10 blur-3xl dark:bg-vibe-yellow/5"></div>
+		<div class="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-vibe-purple/10 blur-3xl dark:bg-vibe-purple/20"></div>
 	</div>
 </section>
 
 <style>
 	.hero {
 		padding-bottom: 0;
-		position: relative;
-		border-radius: inherit;
-		overflow: hidden;
 	}
 	.hero > div {
 		grid-column: 1 / span 12;
 	}
 
-	/* Hero appearance */
-	.hero h1,
-	.hero h2,
-	.hero h3 {
-		margin: 0;
-	}
-	.hero h1 {
-		margin: 0;
-		position: relative;
-		overflow: hidden;
-		visibility: hidden;
-	}
-	.hero h1 > div {
-		position: relative;
-		margin: 0;
-	}
-	.hero :global(.split-parent) {
-		overflow: hidden;
-	}
-	.hero :global(.split-child) {
-		display: inline-block;
-	}
-
-	/* Text rotator */
-	.rotator > span {
-		position: absolute;
-	}
-
-	.rotator > span:not(:nth-child(1)) {
+	/* Initial states for animations */
+	.line-1, .line-2, .line-3 {
 		opacity: 0;
+		transform: translateY(100%);
+	}
+
+	.hero-subtitle, .hero-scroll {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+
+	/* Word carousel - grid stacking */
+	.word-carousel {
+		display: grid;
+	}
+
+	.carousel-word {
+		grid-area: 1 / 1;
+		opacity: 0;
+		transform: translateY(100%);
+		transition: opacity 0.5s ease, transform 0.5s ease;
+	}
+
+	.carousel-word.active {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.carousel-word.exit {
+		opacity: 0;
+		transform: translateY(-100%);
+	}
+
+	/* Animation keyframes */
+	@keyframes slideUp {
+		from {
+			opacity: 0;
+			transform: translateY(100%);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Apply animations */
+	.hero.animated .line-1 {
+		animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	}
+
+	.hero.animated .line-2 {
+		animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+	}
+
+	.hero.animated .line-3 {
+		animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+	}
+
+	.hero.animated .hero-subtitle {
+		animation: fadeInUp 0.8s ease-out 0.5s forwards;
+	}
+
+	.hero.animated .hero-scroll {
+		animation: fadeInUp 0.8s ease-out 0.7s forwards;
 	}
 </style>
 
 <script>
-	// Lightweight hero entrance and rotator replacement (no GSAP)
 	function init() {
-		const heroH1 = document.querySelector('.hero h1');
-		if (heroH1) {
-			// Reveal the h1
-			heroH1.style.visibility = 'visible';
-			heroH1.style.transition = 'transform 800ms cubic-bezier(.22,.9,.18,1), opacity 800ms';
-			heroH1.style.transform = 'translateY(0)';
-			heroH1.style.opacity = '1';
+		// Trigger animations on load
+		const hero = document.querySelector('.hero');
+		if (hero) {
+			setTimeout(() => {
+				hero.classList.add('animated');
+			}, 100);
 		}
 
-		// Rotator fallback
-		const words = document.querySelectorAll('.hero .rotator > span');
-		if (words.length) {
-			words.forEach((w, i) => {
-				w.style.transition = 'opacity 600ms, transform 600ms';
-				if (i !== 0) {
-					w.style.opacity = '0';
-					w.style.transform = 'translateY(100%)';
-				} else {
-					w.style.opacity = '1';
-					w.style.transform = 'translateY(0)';
-				}
-			});
+		// Word carousel
+		const words = document.querySelectorAll('.carousel-word');
+		if (words.length > 0) {
+			let currentIndex = 0;
 
-			let idx = 0;
-			setInterval(() => {
-				const next = (idx + 1) % words.length;
-				words[idx].style.opacity = '0';
-				words[idx].style.transform = 'translateY(-100%)';
-				words[next].style.opacity = '1';
-				words[next].style.transform = 'translateY(0)';
-				idx = next;
-			}, 2500);
+			// Set first word as active after line-3 animation completes (0.1s delay + 0.3s start + 0.8s duration = 1.2s)
+			setTimeout(() => {
+				words[0].classList.add('active');
+			}, 1200);
+
+			// Start rotating words after first word is shown
+			setTimeout(() => {
+				setInterval(() => {
+					const current = words[currentIndex];
+					const nextIndex = (currentIndex + 1) % words.length;
+					const next = words[nextIndex];
+
+					current.classList.remove('active');
+					current.classList.add('exit');
+
+					setTimeout(() => {
+						current.classList.remove('exit');
+						next.classList.add('active');
+					}, 500);
+
+					currentIndex = nextIndex;
+				}, 2500);
+			}, 1200);
 		}
 
-		const goProjectsButton = document.getElementById('go-projects-button');
-		goProjectsButton?.addEventListener('click', function () {
-			const target = document.querySelector('#projects');
-			target?.scrollIntoView({ behavior: 'smooth' });
+		// Scroll button
+		const scrollBtn = document.getElementById('scroll-to-content');
+		scrollBtn?.addEventListener('click', () => {
+			const nextSection = document.getElementById('how-it-works');
+			nextSection?.scrollIntoView({ behavior: 'smooth' });
 		});
 	}
 
-	document.removeEventListener('DOMContentLoaded', init); // astro:page-load
-	document.addEventListener('DOMContentLoaded', init); // astro:page-load
+	document.removeEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', init);
 </script>

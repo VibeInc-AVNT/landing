@@ -1,24 +1,117 @@
-<section>
-  <div class="px-8 py-12 mx-auto md:px-12 2xl:max-w-7xl lg:py-24">
-    <div class="p-8 lg:p-20 bg-blue-700 rounded-4xl lg:rounded-6xl text-center">
-      <div class="inline-flex items-center gap-4">
-        <div class="w-20 h-1 bg-white hidden md:block"></div>
-        <span class="text-xs font-semibold tracking-wide uppercase text-white">
-          Alex Carter, Founder of NexusWeb Solutions.</span
-        >
-      </div>
-      <p
-        class="mt-8 text-4xl font-display font-semibold md:text-6xl lg:text-8xl text-white">
-        Elevate your digital vision with us. Contact now to start creating the
-        extraordinary!
-      </p>
-      <div class="flex mt-10 justify-center">
-        <a
-          class="flex items-center justify-center w-full h-10 px-8 rounded-full py-2 text-sm font-semibold text-black transition-all lg:h-16 bg-lime-500 hover:bg-lime-400 lg:w-auto"
-          href="/forms/contact">
-          Contact us &nbsp;&nbsp; →</a
-        >
-      </div>
-    </div>
-  </div>
+---
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
+
+const { class: className } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+---
+
+<section id="cta" class:list={["section relative overflow-hidden bg-vibe-purple py-24 dark:bg-vibe-purple-800 lg:py-32", className]}>
+	<div class="relative z-10 col-span-12">
+		<div class="mx-auto max-w-4xl text-center">
+			<!-- Main headline -->
+			<h2 class="cta-title font-display text-4xl font-bold uppercase text-white md:text-5xl lg:text-6xl">
+				{t("cta.title")}
+			</h2>
+
+			<!-- Subtitle -->
+			<p class="cta-subtitle mx-auto mt-6 max-w-2xl text-lg text-vibe-purple-100 md:text-xl">
+				{t("cta.subtitle")}
+			</p>
+
+			<!-- CTA buttons -->
+			<div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+				<a
+					href={translatePath("/contact/")}
+					class="cta-btn group inline-flex items-center gap-2 rounded-lg bg-vibe-yellow px-8 py-4 text-lg font-semibold text-vibe-purple-900 transition-all hover:bg-vibe-yellow-400"
+				>
+					{t("cta.primary")}
+					<svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+					</svg>
+				</a>
+				<a
+					href={translatePath("/contact/")}
+					class="cta-btn inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-4 text-lg font-semibold text-white transition-all hover:border-white hover:bg-white/10"
+				>
+					{t("cta.secondary")}
+				</a>
+			</div>
+
+			<!-- Trust badges -->
+			<p class="mt-8 text-sm text-vibe-purple-200">
+				{t("cta.trust")}
+			</p>
+
+			<!-- Company logos placeholder -->
+			<div class="mt-16">
+				<p class="mb-6 text-sm font-medium uppercase tracking-wider text-vibe-purple-200">
+					Trusted by innovative teams
+				</p>
+				<div class="flex flex-wrap items-center justify-center gap-8 opacity-60">
+					{[1, 2, 3, 4, 5].map(() => (
+						<div class="h-8 w-24 rounded bg-white/20"></div>
+					))}
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
+
+<style>
+	.cta-title {
+		animation: fadeInUp 0.8s ease-out;
+	}
+
+	.cta-subtitle {
+		animation: fadeInUp 0.8s ease-out 0.1s both;
+	}
+
+	.cta-btn {
+		animation: fadeInUp 0.8s ease-out 0.2s both;
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>
+
+<script>
+	function init() {
+		const section = document.getElementById('cta');
+		if (!section) return;
+
+		const elements = section.querySelectorAll('.cta-title, .cta-subtitle, .cta-btn');
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						elements.forEach((el) => {
+							(el as HTMLElement).style.animationPlayState = 'running';
+						});
+					}
+				});
+			},
+			{ threshold: 0.3 }
+		);
+
+		elements.forEach((el) => {
+			(el as HTMLElement).style.animationPlayState = 'paused';
+		});
+
+		observer.observe(section);
+	}
+
+	document.removeEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', init);
+</script>

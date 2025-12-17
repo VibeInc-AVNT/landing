@@ -1,0 +1,185 @@
+---
+import { getLangFromUrl, useTranslations } from "@i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const { class: className } = Astro.props;
+
+const metrics = [
+	{
+		label: t("comparison.response"),
+		without: t("comparison.without.response"),
+		with: t("comparison.with.response"),
+		improvement: t("comparison.improvement.response"),
+	},
+	{
+		label: t("comparison.cost"),
+		without: t("comparison.without.cost"),
+		with: t("comparison.with.cost"),
+		improvement: t("comparison.improvement.cost"),
+	},
+	{
+		label: t("comparison.hitrate"),
+		without: t("comparison.without.hitrate"),
+		with: t("comparison.with.hitrate"),
+		improvement: t("comparison.improvement.hitrate"),
+	},
+	{
+		label: t("comparison.latency"),
+		without: t("comparison.without.latency"),
+		with: t("comparison.with.latency"),
+		improvement: t("comparison.improvement.latency"),
+	},
+];
+---
+
+<section id="comparison" class:list={["section relative bg-white py-24 dark:bg-vibe-purple-900 lg:py-32", className]}>
+	<div class="relative z-10 col-span-12">
+		<!-- Section header -->
+		<div class="mx-auto mb-16 max-w-3xl text-center lg:mb-20">
+			<h2 class="font-display text-4xl font-bold uppercase text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
+				{t("comparison.title")}
+			</h2>
+		</div>
+
+		<!-- Comparison table -->
+		<div class="mx-auto max-w-4xl">
+			<div class="overflow-hidden rounded-2xl border border-gray-200 dark:border-vibe-purple-700">
+				<!-- Header row -->
+				<div class="grid grid-cols-3 border-b border-gray-200 bg-gray-50 dark:border-vibe-purple-700 dark:bg-vibe-purple-800/50">
+					<div class="p-5">
+						<span class="text-sm font-medium text-gray-500 dark:text-gray-400">Metric</span>
+					</div>
+					<div class="border-l border-gray-200 p-5 text-center dark:border-vibe-purple-700">
+						<span class="text-sm font-medium text-vibe-red">{t("comparison.without")}</span>
+					</div>
+					<div class="border-l border-gray-200 bg-vibe-purple-50 p-5 text-center dark:border-vibe-purple-700 dark:bg-vibe-yellow/5">
+						<span class="text-sm font-medium text-vibe-purple dark:text-vibe-yellow">{t("comparison.with")}</span>
+					</div>
+				</div>
+
+				<!-- Data rows -->
+				{metrics.map((metric, i) => (
+					<div
+						class={`comparison-row grid grid-cols-3 bg-white dark:bg-vibe-purple-800/30 ${i < metrics.length - 1 ? 'border-b border-gray-200 dark:border-vibe-purple-700' : ''}`}
+						style={`animation-delay: ${i * 0.1}s;`}
+					>
+						<!-- Metric label -->
+						<div class="flex items-center p-5">
+							<span class="font-medium text-gray-900 dark:text-white">{metric.label}</span>
+						</div>
+
+						<!-- Without Vibe Cache -->
+						<div class="flex flex-col items-center justify-center border-l border-gray-200 p-5 dark:border-vibe-purple-700">
+							<span class="text-xl font-bold text-vibe-red md:text-2xl">{metric.without}</span>
+						</div>
+
+						<!-- With Vibe Cache -->
+						<div class="flex flex-col items-center justify-center border-l border-gray-200 bg-vibe-purple-50 p-5 dark:border-vibe-purple-700 dark:bg-vibe-yellow/5">
+							<span class="text-xl font-bold text-vibe-purple dark:text-vibe-yellow md:text-2xl">{metric.with}</span>
+							<span class="mt-1 rounded-full bg-vibe-purple/10 px-2 py-0.5 text-xs font-medium text-vibe-purple dark:bg-vibe-yellow/20 dark:text-vibe-yellow">
+								{metric.improvement}
+							</span>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+
+		<!-- Mobile comparison cards -->
+		<div class="mx-auto mt-12 grid max-w-md gap-6 md:hidden">
+			<!-- Without card -->
+			<div class="rounded-2xl border border-vibe-red/20 bg-vibe-red-50 p-6 dark:border-vibe-red/30 dark:bg-vibe-red/5">
+				<h3 class="mb-4 text-center text-lg font-semibold text-vibe-red">{t("comparison.without")}</h3>
+				<div class="space-y-3">
+					{metrics.map((metric) => (
+						<div class="flex items-center justify-between">
+							<span class="text-sm text-gray-600 dark:text-gray-400">{metric.label}</span>
+							<span class="font-bold text-vibe-red">{metric.without}</span>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<!-- With card -->
+			<div class="rounded-2xl border border-vibe-purple/20 bg-vibe-purple-50 p-6 dark:border-vibe-yellow/30 dark:bg-vibe-yellow/5">
+				<h3 class="mb-4 text-center text-lg font-semibold text-vibe-purple dark:text-vibe-yellow">{t("comparison.with")}</h3>
+				<div class="space-y-3">
+					{metrics.map((metric) => (
+						<div class="flex items-center justify-between">
+							<span class="text-sm text-gray-600 dark:text-gray-400">{metric.label}</span>
+							<div class="flex items-center gap-2">
+								<span class="font-bold text-vibe-purple dark:text-vibe-yellow">{metric.with}</span>
+								<span class="rounded bg-vibe-purple/10 px-1.5 py-0.5 text-xs text-vibe-purple dark:bg-vibe-yellow/20 dark:text-vibe-yellow">
+									{metric.improvement}
+								</span>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+
+		<!-- Bottom note -->
+		<div class="mx-auto mt-10 max-w-2xl text-center">
+			<p class="text-sm text-gray-500 dark:text-gray-400">
+				Real results from production deployments. Your mileage may vary based on query patterns.
+			</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.comparison-row {
+		animation: fadeInUp 0.5s ease-out both;
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(15px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.comparison-section .overflow-hidden {
+			display: none;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.comparison-section .md\:hidden {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	function init() {
+		const rows = document.querySelectorAll('.comparison-row');
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						(entry.target as HTMLElement).style.animationPlayState = 'running';
+					}
+				});
+			},
+			{ threshold: 0.2 }
+		);
+
+		rows.forEach((row) => {
+			(row as HTMLElement).style.animationPlayState = 'paused';
+			observer.observe(row);
+		});
+	}
+
+	document.removeEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', init);
+</script>
