@@ -36,14 +36,9 @@ html {
 	scroll-behavior: smooth;
 }
 
-/* Light mode (default) */
+/* Base styles */
 html {
 	@apply bg-white text-gray-900;
-}
-
-/* Dark mode - keeping similar approach to light mode */
-html.dark {
-	@apply bg-vibe-purple-900 text-gray-100;
 }
 
 body {
@@ -62,12 +57,6 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
 	@apply bg-gray-400;
-}
-.dark ::-webkit-scrollbar-thumb {
-	@apply bg-vibe-purple-600;
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-	@apply bg-vibe-purple-500;
 }
 
 /* Selection */
@@ -93,13 +82,6 @@ body {
 	@apply prose-code:text-vibe-purple-700 prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded;
 }
 
-.dark .prose-styles {
-	@apply prose-invert;
-	@apply prose-headings:text-white;
-	@apply prose-a:text-vibe-yellow;
-	@apply prose-code:text-vibe-yellow prose-code:bg-vibe-purple-800;
-}
-
 /* Buttons - Neo Brutalist Style */
 .btn {
 	@apply inline-flex items-center justify-center font-bold transition-all duration-200;
@@ -120,18 +102,9 @@ body {
 	transition: all 0.2s ease;
 }
 
-.dark .neo-btn {
-	border: 4px solid #F7B801;
-	box-shadow: 8px 8px 0 0 #F7B801;
-}
-
 .neo-btn:hover {
 	transform: translate(2px, 2px);
 	box-shadow: 6px 6px 0 0 #000;
-}
-
-.dark .neo-btn:hover {
-	box-shadow: 6px 6px 0 0 #F7B801;
 }
 
 .neo-btn-small {
@@ -140,18 +113,9 @@ body {
 	transition: all 0.2s ease;
 }
 
-.dark .neo-btn-small {
-	border: 3px solid #F7B801;
-	box-shadow: 4px 4px 0 0 #F7B801;
-}
-
 .neo-btn-small:hover {
 	transform: translate(1px, 1px);
 	box-shadow: 3px 3px 0 0 #000;
-}
-
-.dark .neo-btn-small:hover {
-	box-shadow: 3px 3px 0 0 #F7B801;
 }
 
 .btn-primary {
@@ -163,15 +127,6 @@ body {
 	@apply bg-vibe-purple-600;
 }
 
-.dark .btn-primary {
-	@apply bg-vibe-yellow text-vibe-purple-900;
-	border-color: #000;
-}
-
-.dark .btn-primary:hover {
-	@apply bg-vibe-yellow-400;
-}
-
 .btn-secondary {
 	@apply btn px-6 py-3 rounded-none;
 	@apply bg-white border-4 border-gray-900 text-gray-900;
@@ -179,14 +134,6 @@ body {
 
 .btn-secondary:hover {
 	@apply bg-gray-100;
-}
-
-.dark .btn-secondary {
-	@apply bg-vibe-purple-800 border-vibe-yellow text-vibe-yellow;
-}
-
-.dark .btn-secondary:hover {
-	@apply bg-vibe-purple-700;
 }
 
 /* Cards - Neo Brutalist Style */
@@ -197,19 +144,9 @@ body {
 	box-shadow: 8px 8px 0 0 #000;
 }
 
-.dark .card {
-	@apply bg-vibe-purple-800;
-	border: 4px solid #F7B801;
-	box-shadow: 8px 8px 0 0 #F7B801;
-}
-
 .card-hover:hover {
 	transform: translate(2px, 2px);
 	box-shadow: 6px 6px 0 0 #000;
-}
-
-.dark .card-hover:hover {
-	box-shadow: 6px 6px 0 0 #F7B801;
 }
 
 /* Neo brutalist card class for component use */
@@ -219,26 +156,13 @@ body {
 	transition: all 0.2s ease;
 }
 
-.dark .neo-card {
-	border: 4px solid #F7B801;
-	box-shadow: 8px 8px 0 0 #F7B801;
-}
-
 .neo-card:hover {
 	transform: translate(2px, 2px);
 	box-shadow: 6px 6px 0 0 #000;
 }
 
-.dark .neo-card:hover {
-	box-shadow: 6px 6px 0 0 #F7B801;
-}
-
 .neo-icon-box {
 	border: 3px solid #000;
-}
-
-.dark .neo-icon-box {
-	border: 3px solid #F7B801;
 }
 
 /* Text colors */
@@ -246,17 +170,9 @@ body {
 	@apply text-gray-500;
 }
 
-.dark .text-muted {
-	@apply text-gray-400;
-}
-
 /* Dividers */
 .divider {
 	@apply border-gray-200;
-}
-
-.dark .divider {
-	@apply border-vibe-purple-600;
 }
 
 /* Forms - Neo Brutalist Style */
@@ -281,25 +197,6 @@ textarea:focus,
 select:focus {
 	transform: translate(1px, 1px);
 	box-shadow: 3px 3px 0 0 #000;
-}
-
-.dark input[type="text"],
-.dark input[type="email"],
-.dark input[type="password"],
-.dark textarea,
-.dark select {
-	@apply bg-vibe-purple-800 text-white;
-	@apply placeholder:text-gray-500;
-	border-color: #F7B801;
-	box-shadow: 4px 4px 0 0 #F7B801;
-}
-
-.dark input[type="text"]:focus,
-.dark input[type="email"]:focus,
-.dark input[type="password"]:focus,
-.dark textarea:focus,
-.dark select:focus {
-	box-shadow: 3px 3px 0 0 #F7B801;
 }
 
 /* Squircle utility */
