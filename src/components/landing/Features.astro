@@ -65,12 +65,11 @@ const features = [
 		<div class="mx-auto grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{features.map((feature, i) => (
 				<div
-					class="feature-card group bg-white p-6 transition-all hover:translate-x-[2px] hover:translate-y-[2px] dark:bg-vibe-purple-800/50"
-					style={`animation-delay: ${i * 0.1}s; border: 4px solid #000; box-shadow: 8px 8px 0 0 #000;`}
+					class="feature-card neo-card group bg-white p-6 dark:bg-vibe-purple-800/50"
+					style={`animation-delay: ${i * 0.1}s;`}
 				>
 					<!-- Icon -->
-					<div class={`mb-4 inline-flex p-3 ${feature.bgColor} ${feature.color}`}
-						 style="border: 3px solid #000;">
+					<div class={`mb-4 inline-flex p-3 neo-icon-box ${feature.bgColor} ${feature.color}`}>
 						<Fragment set:html={feature.icon} />
 					</div>
 

@@ -22,9 +22,9 @@ const { pathname } = Astro.url;
 
 <header>
 	<a href={translatePath("/")} aria-label="Home" class="logo absolute z-50 flex h-[4.5rem] items-center md:h-[5.9rem]">
-		<div class="flex items-center gap-1">
-			<span class="logo-wordmark font-display text-2xl font-black tracking-tighter md:text-3xl text-gray-900 dark:text-white">
-				<span class="logo-v inline-block bg-vibe-purple text-white dark:bg-vibe-yellow dark:text-vibe-purple-900 px-2 py-1" style="border: 3px solid #000; box-shadow: 3px 3px 0 0 #000; transform: rotate(-3deg);">V</span><span class="logo-ibe">IBE</span>
+		<div class="flex items-center">
+			<span class="logo-wordmark font-display text-2xl font-black tracking-tight md:text-3xl text-gray-900 dark:text-white uppercase">
+				<span class="logo-v inline-block bg-vibe-purple text-white dark:bg-vibe-yellow dark:text-vibe-purple-900 px-2.5 py-1 mr-0.5 border-[3px] border-black" style="box-shadow: 4px 4px 0 0 #000;">V</span><span class="logo-ibe">ibe</span>
 			</span>
 		</div>
 	</a>
@@ -32,7 +32,7 @@ const { pathname } = Astro.url;
 		<div class="ml-auto md:max-w-fit" data-xbind.class="{'max-w-3xl': open, 'max-w-[8rem]': !open }">
 			<div class="mx-auto w-full">
 				<div
-					class="nav-container relative mx-auto flex w-full flex-col justify-center overflow-x-hidden border-4 border-black bg-white/90 shadow-[6px_6px_0_0_#000] backdrop-blur-xl dark:bg-vibe-purple-800/90 md:flex-row-reverse">
+					class="nav-container relative mx-auto flex w-full flex-col justify-center overflow-x-hidden border-[3px] border-black bg-white/90 shadow-[5px_5px_0_0_#000] backdrop-blur-xl dark:bg-vibe-purple-800/90 md:flex-row-reverse">
 					<div class="flex flex-row items-center justify-end md:hidden">
 						<a class="px-3 py-[0.4rem] pl-4 text-vibe-purple transition-colors hover:text-vibe-purple-600 dark:text-vibe-yellow dark:hover:text-vibe-yellow-400" href="mailto:support@avunite.com" aria-label="Contact Email">
 							<Icon class="" name="octicon:mail-16" width="20" data-xbind.class="{'hidden': open}" />
@@ -143,23 +143,24 @@ const { pathname } = Astro.url;
 		color: inherit;
 	}
 
-	.neo-btn-small {
-		border: 3px solid #000;
-		box-shadow: 4px 4px 0 0 #000;
+	/* Logo styling */
+	.logo-wordmark {
+		letter-spacing: -0.02em;
 	}
-
-	.neo-btn-small:hover {
-		transform: translate(1px, 1px);
-		box-shadow: 3px 3px 0 0 #000;
-	}
-
-	/* Logo animation */
+	
 	.logo-v {
-		transition: transform 0.2s ease;
+		transition: all 0.2s ease;
+		display: inline-block;
+		vertical-align: baseline;
 	}
 
 	.logo:hover .logo-v {
-		transform: rotate(-8deg) scale(1.05);
+		transform: translateY(-2px);
+		box-shadow: 4px 6px 0 0 #000 !important;
+	}
+	
+	.logo-ibe {
+		font-weight: 900;
 	}
 </style>
 
