@@ -22,28 +22,26 @@ const { pathname } = Astro.url;
 
 <header>
 	<a href={translatePath("/")} aria-label="Home" class="logo absolute z-50 flex h-[4.5rem] items-center md:h-[5.9rem]">
-		<div class="flex items-center gap-2">
-			<svg viewBox="0 0 40 40" class="h-8 w-8 md:h-10 md:w-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<circle cx="20" cy="20" r="18" class="stroke-vibe-purple dark:stroke-vibe-yellow" stroke-width="2.5"/>
-				<path d="M14 25L20 12L26 25L20 21L14 25Z" class="fill-vibe-purple dark:fill-vibe-yellow"/>
-			</svg>
-			<span class="font-display text-xl font-bold tracking-tight md:text-2xl text-gray-900 dark:text-white">Vibe</span>
+		<div class="flex items-center">
+			<span class="logo-wordmark font-display text-2xl font-black tracking-tight md:text-3xl text-gray-900 uppercase">
+				<span class="logo-v inline-block bg-vibe-purple text-white px-2.5 py-1 mr-1.5 border-[3px] border-black" style="box-shadow: 4px 4px 0 0 #000;">V</span><span class="logo-ibe">ibe</span>
+			</span>
 		</div>
 	</a>
 	<div data-xdata="{ open: false }" class="navigation fixed right-0 top-0 z-50" data-xbind.class="{'w-full navbar-open': open}">
 		<div class="ml-auto md:max-w-fit" data-xbind.class="{'max-w-3xl': open, 'max-w-[8rem]': !open }">
 			<div class="mx-auto w-full">
 				<div
-					class="nav-container relative mx-auto flex w-full flex-col justify-center overflow-x-hidden rounded-xl border border-gray-200 bg-white/80 shadow-sm backdrop-blur-xl dark:border-vibe-purple-700 dark:bg-vibe-purple-800/80 md:flex-row-reverse">
+					class="nav-container relative mx-auto flex w-full flex-col justify-center overflow-x-hidden border-[3px] border-black bg-white/90 shadow-[5px_5px_0_0_#000] backdrop-blur-xl md:flex-row-reverse">
 					<div class="flex flex-row items-center justify-end md:hidden">
-						<a class="px-3 py-[0.4rem] pl-4 text-vibe-purple transition-colors hover:text-vibe-purple-600 dark:text-vibe-yellow dark:hover:text-vibe-yellow-400" href="mailto:support@avunite.com" aria-label="Contact Email">
+						<a class="px-3 py-[0.4rem] pl-4 text-vibe-purple transition-colors hover:text-vibe-purple-600" href="mailto:support@avunite.com" aria-label="Contact Email">
 							<Icon class="" name="octicon:mail-16" width="20" data-xbind.class="{'hidden': open}" />
 						</a>
 						<button
 							data-xon.click="open = !open"
 							data-xbind.style="{'padding-top': open ? '1rem' : '0.4rem'}"
 							aria-label="Open navbar"
-							class="inline-flex items-center justify-center px-3 py-[0.4rem] pr-4 text-gray-700 hover:text-vibe-purple focus:outline-none dark:text-white dark:hover:text-vibe-yellow">
+							class="inline-flex items-center justify-center px-3 py-[0.4rem] pr-4 text-gray-700 hover:text-vibe-purple focus:outline-none">
 							<svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
 								<path
 									data-xbind.class="{'hidden': open, 'inline-flex': !open }"
@@ -74,7 +72,7 @@ const { pathname } = Astro.url;
 											href={page.isAnchor ? page.url : translatePath(page.url)}
 											class={`nav-link inline-block cursor-pointer px-1 py-[0.33rem]`}>
 											<span class="menu-item-container inline-block rounded-lg">
-												<span class="menu-item px-3 py-1 font-medium text-gray-600 transition-colors hover:text-vibe-purple dark:text-gray-300 dark:hover:text-white">
+												<span class="menu-item px-3 py-1 font-medium text-gray-600 transition-colors hover:text-vibe-purple">
 													{page.title}
 												</span>
 											</span>
@@ -82,33 +80,17 @@ const { pathname } = Astro.url;
 									</li>
 								))
 							}
-							<!-- Dark mode toggle -->
-							<li class="hidden md:block">
-								<button
-									id="theme-toggle"
-									aria-label="Toggle dark mode"
-									class="ml-2 inline-flex items-center justify-center rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-vibe-purple dark:text-gray-300 dark:hover:bg-vibe-purple-700 dark:hover:text-vibe-yellow">
-									<!-- Sun icon (shown in dark mode) -->
-									<svg class="hidden h-5 w-5 dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-									</svg>
-									<!-- Moon icon (shown in light mode) -->
-									<svg class="block h-5 w-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-									</svg>
-								</button>
-							</li>
 							<li class="hidden md:block">
 								<a
 								href="mailto:support@avunite.com"
-									class="ml-2 inline-flex items-center justify-center rounded-lg bg-vibe-purple px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-vibe-purple-600 dark:bg-vibe-yellow dark:text-vibe-purple-900 dark:hover:bg-vibe-yellow-400">
+									class="neo-btn-small ml-2 inline-flex items-center justify-center bg-vibe-purple px-4 py-2 text-sm font-bold text-white transition-all hover:bg-vibe-purple-600">
 									{t("nav.getstarted")}
 								</a>
 							</li>
 							<li class="md:hidden">
 								<a href={translatePath(path, `${lang === "it" ? "en" : "it"}`)} class="inline-block cursor-pointer px-1 py-[0.33rem]">
 									<span class="menu-item-container inline-block">
-										<span class="menu-item px-4 py-1 font-medium uppercase text-gray-600 hover:text-vibe-purple dark:text-gray-300 dark:hover:text-white">
+										<span class="menu-item px-4 py-1 font-medium uppercase text-gray-600 hover:text-vibe-purple">
 											{lang === "it" ? "en" : "it"}
 										</span>
 									</span>
@@ -144,38 +126,30 @@ const { pathname } = Astro.url;
 	nav a:hover .menu-item {
 		color: inherit;
 	}
+
+	/* Logo styling */
+	.logo-wordmark {
+		letter-spacing: -0.02em;
+	}
+	
+	.logo-v {
+		transition: all 0.2s ease;
+		display: inline-block;
+		vertical-align: baseline;
+	}
+
+	.logo:hover .logo-v {
+		transform: translateY(-2px);
+		box-shadow: 4px 6px 0 0 #000 !important;
+	}
+	
+	.logo-ibe {
+		font-weight: 900;
+	}
 </style>
 
 <script>
 	function init() {
-		// Theme toggle
-		const themeToggle = document.getElementById('theme-toggle');
-
-		// Check for saved preference or default to system preference
-		const getThemePreference = () => {
-			if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-				return localStorage.getItem('theme');
-			}
-			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-		};
-
-		const setTheme = (theme: string) => {
-			if (theme === 'dark') {
-				document.documentElement.classList.add('dark');
-			} else {
-				document.documentElement.classList.remove('dark');
-			}
-			localStorage.setItem('theme', theme);
-		};
-
-		// Set initial theme
-		setTheme(getThemePreference());
-
-		themeToggle?.addEventListener('click', () => {
-			const isDark = document.documentElement.classList.contains('dark');
-			setTheme(isDark ? 'light' : 'dark');
-		});
-
 		// Smooth scroll for anchor links
 		document.querySelectorAll('.nav-link').forEach(link => {
 			link.addEventListener('click', function(e) {

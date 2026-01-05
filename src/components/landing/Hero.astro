@@ -7,7 +7,7 @@ const translatePath = useTranslatedPath(lang);
 
 ---
 
-<section id="hero" class="section hero relative min-h-screen overflow-hidden bg-white dark:bg-vibe-purple-900">
+<section id="hero" class="section hero relative min-h-screen overflow-hidden bg-white">
 	<div class="relative z-10 mx-auto flex h-full flex-col py-4 lg:py-10">
 		<div class="relative flex flex-1 flex-col justify-center pb-10 pt-24 lg:pt-16">
 
@@ -15,10 +15,10 @@ const translatePath = useTranslatedPath(lang);
 			<div class="hero-content flex justify-center">
 				<h1 class="hero-title text-center font-display text-5xl font-extrabold leading-[0.9] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">
 					<span class="block overflow-hidden">
-						<span class="line-1 inline-block text-gray-900 dark:text-white">{t("hero.title.main")}</span>
+						<span class="line-1 inline-block text-gray-900">{t("hero.title.main")}</span>
 					</span>
 					<span class="block overflow-hidden mt-4">
-						<span class="line-2 inline-block text-vibe-purple dark:text-vibe-yellow font-semibold">
+						<span class="line-2 inline-block text-vibe-purple font-semibold">
 							<span class="word-carousel">
 								<span class="carousel-word active">{t("hero.highlight.one")}</span>
 								<span class="carousel-word">{t("hero.highlight.two")}</span>
@@ -30,14 +30,14 @@ const translatePath = useTranslatedPath(lang);
 
 			<!-- Subtitle -->
 			<div class="hero-subtitle mt-8 flex flex-col items-center gap-6 text-center lg:mt-12">
-				<p class="max-w-xl text-lg text-gray-600 dark:text-gray-300 md:text-xl">
+				<p class="max-w-xl text-lg text-gray-600 md:text-xl">
 					{t("hero.subtitle")}
 				</p>
 
 				<!-- Single CTA -->
 				<a
 					href="mailto:support@avunite.com"
-					class="group inline-flex items-center gap-2 rounded-lg bg-vibe-purple px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-vibe-purple-600 hover:scale-105 dark:bg-vibe-yellow dark:text-vibe-purple-900 dark:hover:bg-vibe-yellow-400">
+					class="neo-btn group inline-flex items-center gap-2 bg-vibe-purple px-8 py-4 text-lg font-bold text-white transition-all hover:bg-vibe-purple-600">
 					{t("contact")}
 					<svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -47,7 +47,7 @@ const translatePath = useTranslatedPath(lang);
 
 			<!-- Scroll indicator -->
 			<div class="hero-scroll mt-16 flex justify-center lg:mt-20">
-				<button id="scroll-to-content" class="flex flex-col items-center gap-2 text-gray-400 transition-colors hover:text-vibe-purple dark:hover:text-vibe-yellow">
+				<button id="scroll-to-content" class="flex flex-col items-center gap-2 text-gray-400 transition-colors hover:text-vibe-purple">
 					<span class="text-sm">{t("hero.scroll")}</span>
 					<svg class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
@@ -59,8 +59,8 @@ const translatePath = useTranslatedPath(lang);
 
 	<!-- Decorative elements -->
 	<div class="pointer-events-none absolute inset-0 overflow-hidden">
-		<div class="absolute -right-40 -top-40 h-80 w-80 rounded-full bg-vibe-yellow/10 blur-3xl dark:bg-vibe-yellow/5"></div>
-		<div class="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-vibe-purple/10 blur-3xl dark:bg-vibe-purple/20"></div>
+		<div class="absolute -right-40 -top-40 h-80 w-80 rounded-full bg-vibe-yellow/10 blur-3xl"></div>
+		<div class="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-vibe-purple/10 blur-3xl"></div>
 	</div>
 </section>
 
