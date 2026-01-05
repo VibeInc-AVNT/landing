@@ -5,6 +5,7 @@ import BaseHead from "@components/BaseHead.astro";
 import BackgroundTexture from "@components/global/BackgroundTexture.astro";
 import Footer from "@components/global/Footer.astro";
 import Navigation from "@components/global/Navigation.astro";
+import WarningBanner from "@components/global/WarningBanner.astro";
 import { getLangFromUrl } from "../i18n/utils";
 
 const { pathname } = Astro.url;
@@ -75,6 +76,7 @@ function cursorFollowerActive() {
 	</head>
 	<body class="bg-white transition-colors">
 		<Navigation />
+		<WarningBanner />
 		{cursorFollowerActive() && <BlobCursorFollower />}
 		<slot />
 		<Footer />
