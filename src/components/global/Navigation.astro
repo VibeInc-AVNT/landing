@@ -34,7 +34,7 @@ const { pathname } = Astro.url;
 		<div class="ml-auto md:max-w-fit" data-xbind.class="{'max-w-3xl': open, 'max-w-[8rem]': !open }">
 			<div class="mx-auto w-full">
 				<div
-					class="nav-container relative mx-auto flex w-full flex-col justify-center overflow-x-hidden rounded-xl border border-gray-200 bg-white/80 shadow-sm backdrop-blur-xl dark:border-vibe-purple-700 dark:bg-vibe-purple-800/80 md:flex-row-reverse">
+					class="nav-container relative mx-auto flex w-full flex-col justify-center overflow-x-hidden border-4 border-black bg-white/90 shadow-[6px_6px_0_0_#000] backdrop-blur-xl dark:bg-vibe-purple-800/90 md:flex-row-reverse">
 					<div class="flex flex-row items-center justify-end md:hidden">
 						<a class="px-3 py-[0.4rem] pl-4 text-vibe-purple transition-colors hover:text-vibe-purple-600 dark:text-vibe-yellow dark:hover:text-vibe-yellow-400" href="mailto:support@avunite.com" aria-label="Contact Email">
 							<Icon class="" name="octicon:mail-16" width="20" data-xbind.class="{'hidden': open}" />
@@ -87,7 +87,8 @@ const { pathname } = Astro.url;
 								<button
 									id="theme-toggle"
 									aria-label="Toggle dark mode"
-									class="ml-2 inline-flex items-center justify-center rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-vibe-purple dark:text-gray-300 dark:hover:bg-vibe-purple-700 dark:hover:text-vibe-yellow">
+									class="ml-2 inline-flex items-center justify-center border-3 border-black bg-gray-100 p-2 text-gray-600 transition-colors hover:bg-gray-200 hover:text-vibe-purple dark:bg-vibe-purple-700 dark:text-gray-300 dark:hover:bg-vibe-purple-600 dark:hover:text-vibe-yellow"
+									style="border: 3px solid #000; box-shadow: 3px 3px 0 0 #000;">
 									<!-- Sun icon (shown in dark mode) -->
 									<svg class="hidden h-5 w-5 dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -101,7 +102,10 @@ const { pathname } = Astro.url;
 							<li class="hidden md:block">
 								<a
 								href="mailto:support@avunite.com"
-									class="ml-2 inline-flex items-center justify-center rounded-lg bg-vibe-purple px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-vibe-purple-600 dark:bg-vibe-yellow dark:text-vibe-purple-900 dark:hover:bg-vibe-yellow-400">
+									class="ml-2 inline-flex items-center justify-center bg-vibe-purple px-4 py-2 text-sm font-bold text-white transition-all hover:bg-vibe-purple-600 dark:bg-vibe-yellow dark:text-vibe-purple-900 dark:hover:bg-vibe-yellow-400"
+									style="border: 3px solid #000; box-shadow: 4px 4px 0 0 #000;"
+									onmouseover="this.style.transform='translate(1px, 1px)'; this.style.boxShadow='3px 3px 0 0 #000';"
+									onmouseout="this.style.transform='translate(0, 0)'; this.style.boxShadow='4px 4px 0 0 #000';">
 									{t("nav.getstarted")}
 								</a>
 							</li>

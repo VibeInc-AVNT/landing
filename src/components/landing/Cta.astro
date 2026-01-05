@@ -25,8 +25,10 @@ const translatePath = useTranslatedPath(lang);
 			<div class="mt-10 flex items-center justify-center">
 				<a
 					href="mailto:support@avunite.com"
-					class="cta-btn group inline-flex items-center gap-2 rounded-lg bg-vibe-yellow px-8 py-4 text-lg font-semibold text-vibe-purple-900 transition-all hover:bg-vibe-yellow-400"
-				>
+					class="cta-btn group inline-flex items-center gap-2 bg-vibe-yellow px-8 py-4 text-lg font-bold text-vibe-purple-900 transition-all hover:bg-vibe-yellow-400"
+					style="border: 4px solid #000; box-shadow: 8px 8px 0 0 #000;"
+					onmouseover="this.style.transform='translate(2px, 2px)'; this.style.boxShadow='6px 6px 0 0 #000';"
+					onmouseout="this.style.transform='translate(0, 0)'; this.style.boxShadow='8px 8px 0 0 #000';">
 					{t("contact")}
 					<svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
