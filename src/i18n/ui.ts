@@ -15,7 +15,7 @@ export const ui = {
 		services: "Features",
 		homepage: "Homepage",
 		// Warning Banner
-		"warning.message": "⚠️ Vibe is currently in development and seeking funding. No nodes are online yet.",
+		"warning.message": "Vibe is currently in development and seeking funding. No nodes are online yet.",
 		"warning.cta": "Contact Us for More Info",
 		tagline:
 			"The future of AI caching infrastructure - coming soon.",
@@ -198,7 +198,7 @@ export const ui = {
 		services: "Funzionalità",
 		homepage: "Homepage",
 		// Warning Banner
-		"warning.message": "⚠️ Vibe è attualmente in sviluppo e cerca finanziamenti. Nessun nodo è ancora online.",
+		"warning.message": "Vibe è attualmente in sviluppo e cerca finanziamenti. Nessun nodo è ancora online.",
 		"warning.cta": "Contattaci per Maggiori Informazioni",
 		tagline:
 			"Il futuro dell'infrastruttura di caching AI - in arrivo.",
