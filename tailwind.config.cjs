@@ -119,6 +119,7 @@ module.exports = {
 				display: ["Midnight", ...defaultTheme.fontFamily.sans],
 				sans: ["Inter", ...defaultTheme.fontFamily.sans],
 				mono: ["JetBrains Mono", ...defaultTheme.fontFamily.mono],
+				arimo: ["Arimo", ...defaultTheme.fontFamily.sans],
 			},
 			animation: {
 				"fade-in": "fadeIn 0.5s ease-out",
