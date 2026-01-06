@@ -76,9 +76,9 @@ export const ui = {
 		"howitworks.4.desc": "Edge nodes sync cache entries via P2P gossip protocol. Config updates propagate worldwide in ~6 seconds.",
 		// Features Section
 		"features.title": "Features & Roadmap",
-		"features.available": "✅ Available Now (MVP)",
-		"features.rolling": "🚧 Rolling Out (Q1 2026 - Phase 4-5)",
-		"features.planned": "📋 Planned (Q2 2026+ - Phase 6-8)",
+		"features.available": "Available Now (MVP)",
+		"features.rolling": "Rolling Out (Q1 2026 - Phase 4-5)",
+		"features.planned": "Planned (Q2 2026+ - Phase 6-8)",
 		
 		// Available Now
 		"feature.semantic.title": "Semantic Understanding",
@@ -294,9 +294,9 @@ export const ui = {
 		"howitworks.4.desc": "I nodi edge sincronizzano le voci cache via protocollo gossip P2P. Gli aggiornamenti config si propagano in tutto il mondo in ~6 secondi.",
 		// Features Section
 		"features.title": "Funzionalità e Roadmap",
-		"features.available": "✅ Disponibile Ora (MVP)",
-		"features.rolling": "🚧 In Distribuzione (Q1 2026 - Fase 4-5)",
-		"features.planned": "📋 Pianificato (Q2 2026+ - Fase 6-8)",
+		"features.available": "Disponibile Ora (MVP)",
+		"features.rolling": "In Distribuzione (Q1 2026 - Fase 4-5)",
+		"features.planned": "Pianificato (Q2 2026+ - Fase 6-8)",
 		
 		// Available Now
 		"feature.semantic.title": "Comprensione Semantica",
