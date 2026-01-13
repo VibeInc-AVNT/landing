@@ -24,8 +24,8 @@
 						<input
 							type="url"
 							id="custom-url"
-							placeholder="https://cache.vibe.ai/v1/chat/completions"
-							value="https://cache.vibe.ai/v1/chat/completions"
+							placeholder="http://localhost:8081/v1/chat/completions"
+							value="http://localhost:8081/v1/chat/completions"
 							class="flex-1 rounded-lg border-4 border-black px-4 py-3 focus:outline-none focus:ring-2 focus:ring-vibe-purple"
 						/>
 						<button
@@ -36,7 +36,7 @@
 						</button>
 					</div>
 					<p class="mt-2 text-xs text-gray-600">
-						Enter your VibeCache endpoint. Leave default for demo mode with simulated responses.
+						Enter your VibeCache endpoint (default: http://localhost:8081).
 					</p>
 				</div>
 
@@ -71,6 +71,8 @@
 						<option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet (Anthropic)</option>
 						<option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Google)</option>
 						<option value="command-r">Command R (Cohere)</option>
+						<option value="z-alpha">Z-Alpha (z.ai)</option>
+						<option value="z-beta">Z-Beta (z.ai)</option>
 					</select>
 					<p class="mt-2 text-xs text-gray-600">
 						VibeCache auto-detects the provider based on model name prefix.
@@ -94,7 +96,7 @@
 						</div>
 						<div class="flex-1">
 							<div class="neo-card bg-white p-3 text-sm">
-								<p>Configure your custom endpoint above and start chatting! In demo mode, responses are simulated. With a real endpoint, you'll see actual VibeCache performance.</p>
+								<p>Ready to test VibeCache! Ensure VibeCache is running on localhost:8081, then start chatting to see real semantic caching in action. Use the Test button above to verify connectivity.</p>
 							</div>
 							<div class="mt-1 text-xs text-gray-500">Just now</div>
 						</div>
@@ -149,7 +151,7 @@
 </section>
 
 <script>
-	let customEndpoint = 'https://cache.vibe.ai/v1/chat/completions';
+	let customEndpoint = 'http://localhost:8081/v1/chat/completions';
 	let customApiKey = '';
 	let customModel = 'gpt-4o-mini';
 	let isConnected = false;
@@ -194,10 +196,21 @@
 		customApiKey = apiKey;
 		customModel = model;
 
-		// For demo purposes, simulate connection test
-		showConnectionStatus(false, 'Demo mode - using simulated responses. Enter a real VibeCache endpoint to test actual API calls.');
-		
-		// In production, this would make an actual API call to test the connection
+		try {
+			// Test connection with health endpoint or simple request
+			const healthUrl = url.replace('/v1/chat/completions', '/health');
+			const response = await fetch(healthUrl, {
+				method: 'GET',
+			});
+
+			if (response.ok) {
+				showConnectionStatus(true, `Connected to ${url}`);
+			} else {
+				showConnectionStatus(false, `HTTP ${response.status}: ${response.statusText}`);
+			}
+		} catch (error) {
+			showConnectionStatus(false, `Error: ${error.message}. Ensure VibeCache is running on localhost:8081`);
+		}
 	}
 
 	function addCustomMessage(text, isUser = false, isHit = false, latency = 0, metadata = null) {
@@ -264,30 +277,63 @@
 		const loading = document.getElementById('custom-loading');
 		loading.classList.remove('hidden');
 
-		// Simulate API call (in production, this would be a real fetch)
-		const startTime = Date.now();
-		const isHit = Math.random() < 0.68;
-		const latency = isHit ? 40 + Math.random() * 25 : 1100 + Math.random() * 800;
-		
-		await new Promise(resolve => setTimeout(resolve, latency));
-		
-		loading.classList.add('hidden');
+		try {
+			const startTime = performance.now();
+			
+			// Call real VibeCache API with custom endpoint
+			const headers = {
+				'Content-Type': 'application/json',
+			};
+			
+			if (customApiKey) {
+				headers['Authorization'] = `Bearer ${customApiKey}`;
+			}
 
-		// Generate demo response
-		const response = `This is a simulated response to: "${message}"\n\nIn demo mode, responses are generated locally. Configure a real VibeCache endpoint above to see actual API performance with semantic caching.\n\nYour query would be converted to a 384-dimensional embedding and checked against the cache with a similarity threshold of ≥0.80. ${isHit ? 'This was a simulated cache hit! ⚡' : 'This was a simulated cache miss.'}`;
-		
-		const tokens = 100 + Math.floor(Math.random() * 150);
-		
-		addCustomMessage(response, false, isHit, Math.round(latency), {
-			model: customModel,
-			tokens: tokens,
-		});
+			const response = await fetch(customEndpoint, {
+				method: 'POST',
+				headers: headers,
+				body: JSON.stringify({
+					model: customModel,
+					messages: [
+						{ role: 'user', content: message }
+					],
+					temperature: 0.7,
+					max_tokens: 500
+				}),
+			});
 
-		// Track metrics
-		if (window.trackCacheRequest) {
-			const tokensSaved = isHit ? tokens : 0;
-			const costSaved = isHit ? (tokens / 1000000) * 0.15 : 0;
-			window.trackCacheRequest(isHit, latency, tokensSaved, costSaved);
+			const endTime = performance.now();
+			const latency = Math.round(endTime - startTime);
+
+			if (!response.ok) {
+				throw new Error(`API error: ${response.status} ${response.statusText}`);
+			}
+
+			const data = await response.json();
+			loading.classList.add('hidden');
+
+			// Extract response
+			const assistantMessage = data.choices[0].message.content;
+			const tokens = data.usage?.total_tokens || 0;
+			
+			// Detect cache hit from response timing (cache hits are <100ms)
+			const isHit = latency < 100;
+			
+			addCustomMessage(assistantMessage, false, isHit, latency, {
+				model: customModel,
+				tokens: tokens,
+			});
+
+			// Track metrics
+			if (window.trackCacheRequest) {
+				const tokensSaved = isHit ? tokens : 0;
+				const costSaved = isHit ? (tokens / 1000000) * 0.15 : 0;
+				window.trackCacheRequest(isHit, latency, tokensSaved, costSaved);
+			}
+		} catch (error) {
+			loading.classList.add('hidden');
+			addCustomMessage(`Error: ${error.message}\n\nPlease ensure VibeCache is running on localhost:8081 and try again.`, false, false, 0);
+			console.error('API Error:', error);
 		}
 	}
 

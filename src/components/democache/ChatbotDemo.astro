@@ -90,64 +90,12 @@
 </section>
 
 <script>
-	// Knowledge base for demo responses
-	const chatbotKnowledge = {
-		"quantum computing": {
-			response: "Quantum computing is a revolutionary computing paradigm that leverages quantum mechanical phenomena like superposition and entanglement. Unlike classical computers that use bits (0 or 1), quantum computers use qubits that can exist in multiple states simultaneously.\n\nKey advantages:\n• Exponential speedup for specific problems\n• Breakthrough potential in cryptography, drug discovery, and optimization\n• Can solve problems intractable for classical computers\n\nHowever, quantum computers are still in early stages and face challenges like error correction and maintaining quantum coherence.",
-			tokens: 220,
-		},
-		"machine learning": {
-			response: "Machine learning is a subset of artificial intelligence where systems learn from data without being explicitly programmed. Instead of following pre-defined rules, ML algorithms identify patterns and make decisions based on examples.\n\nMain types:\n• **Supervised Learning**: Learning from labeled data (e.g., classification, regression)\n• **Unsupervised Learning**: Finding patterns in unlabeled data (e.g., clustering)\n• **Reinforcement Learning**: Learning through trial and error with rewards\n\nML powers modern applications like recommendation systems, autonomous vehicles, and natural language processing.",
-			tokens: 240,
-		},
-		"api design": {
-			response: "Best practices for API design:\n\n**1. RESTful Principles**\n• Use clear, hierarchical URLs\n• Leverage HTTP methods correctly (GET, POST, PUT, DELETE)\n• Return appropriate status codes\n\n**2. Consistency**\n• Maintain consistent naming conventions\n• Use standard response formats (JSON)\n• Version your API (/v1/, /v2/)\n\n**3. Documentation**\n• Provide clear, comprehensive docs\n• Include code examples\n• Use OpenAPI/Swagger specifications\n\n**4. Security**\n• Implement authentication (OAuth, JWT)\n• Use HTTPS\n• Rate limiting and validation\n\n**5. Performance**\n• Enable caching (hint: like VibeCache! 😉)\n• Pagination for large datasets\n• Compression",
-			tokens: 260,
-		},
-		"semantic caching": {
-			response: "Semantic caching is an intelligent caching approach that understands the *meaning* of queries rather than just matching exact text.\n\n**How it differs from traditional caching:**\n\n**Traditional**: \"What is ML?\" ≠ \"Explain machine learning\" (cache miss)\n**Semantic**: Both queries match! (cache hit) ⚡\n\n**The technology:**\n1. Convert queries to embeddings (vector representations)\n2. Use cosine similarity to find semantically similar cached responses\n3. Return cached results if similarity ≥ 80%\n\n**Real-world impact:**\n• 68% cache hit rate vs 10-15% for exact matching\n• ~45ms response time vs ~1500ms for LLM calls\n• 70% reduction in API costs\n\nVibeCache implements this at scale with distributed edge nodes! 🚀",
-			tokens: 280,
-		},
-	};
+	// Real VibeCache API endpoint
+	const VIBECACHE_API = 'http://localhost:8081/v1/chat/completions';
+	const CHATBOT_MODEL = 'gpt-4o-mini';
 
-	// Track conversation for better cache simulation
-	const conversationHistory = [];
-
-	function findChatbotResponse(query) {
-		const lowerQ = query.toLowerCase();
-		
-		// Check if this is semantically similar to a previous query
-		for (const prev of conversationHistory) {
-			if (calculateSimilarity(query, prev.query) > 0.8) {
-				return { ...prev.response, wasSimilar: true };
-			}
-		}
-
-		// Find new response
-		for (const [key, value] of Object.entries(chatbotKnowledge)) {
-			if (lowerQ.includes(key) || key.includes(lowerQ.split(' ').filter(w => w.length > 3)[0])) {
-				return { ...value, wasSimilar: false };
-			}
-		}
-
-		// Default response
-		return {
-			response: "That's an interesting question! In this demo, I have pre-programmed responses for topics like quantum computing, machine learning, API design, and semantic caching.\n\nTry asking about one of those topics, or rephrase a previous question to see semantic caching in action. For example, if you asked 'What is quantum computing?', try 'Explain quantum computing' to see a cache hit! ⚡",
-			tokens: 140,
-			wasSimilar: false,
-		};
-	}
-
-	function calculateSimilarity(str1, str2) {
-		// Simple similarity calculation for demo
-		const words1 = str1.toLowerCase().split(' ').filter(w => w.length > 3);
-		const words2 = str2.toLowerCase().split(' ').filter(w => w.length > 3);
-		
-		if (words1.length === 0 || words2.length === 0) return 0;
-		
-		const commonWords = words1.filter(w => words2.includes(w)).length;
-		return (commonWords * 2) / (words1.length + words2.length);
-	}
+	// System prompt for general chatbot
+	const CHATBOT_SYSTEM_PROMPT = `You are a knowledgeable AI assistant. Provide clear, informative, and helpful responses to user questions on various topics including technology, science, programming, and general knowledge. Keep responses concise but comprehensive.`;
 
 	function addChatbotMessage(text, isUser = false, isHit = false, latency = 0) {
 		const chatContainer = document.getElementById('chatbot-chat');
@@ -205,37 +153,56 @@
 		const loading = document.getElementById('chatbot-loading');
 		loading.classList.remove('hidden');
 
-		// Get response
-		const responseData = findChatbotResponse(prompt);
-		
-		// Determine if cache hit (similar to previous query or explicitly marked)
-		const isHit = responseData.wasSimilar || Math.random() < 0.68; // 68% base hit rate
-		const latency = isHit ? 35 + Math.random() * 30 : 1000 + Math.random() * 1000;
-		
-		// Wait for simulated latency
-		await new Promise(resolve => setTimeout(resolve, latency));
-		
-		loading.classList.add('hidden');
-
-		// Add to conversation history
-		if (!responseData.wasSimilar) {
-			conversationHistory.push({
-				query: prompt,
-				response: {
-					response: responseData.response,
-					tokens: responseData.tokens,
+		try {
+			const startTime = performance.now();
+			
+			// Call real VibeCache API
+			const response = await fetch(VIBECACHE_API, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
 				},
+				body: JSON.stringify({
+					model: CHATBOT_MODEL,
+					messages: [
+						{ role: 'system', content: CHATBOT_SYSTEM_PROMPT },
+						{ role: 'user', content: prompt }
+					],
+					temperature: 0.7,
+					max_tokens: 500
+				}),
 			});
-		}
 
-		// Add response
-		addChatbotMessage(responseData.response, false, isHit, Math.round(latency));
+			const endTime = performance.now();
+			const latency = Math.round(endTime - startTime);
 
-		// Track metrics
-		if (window.trackCacheRequest) {
-			const tokensSaved = isHit ? responseData.tokens : 0;
-			const costSaved = isHit ? (responseData.tokens / 1000000) * 0.15 : 0;
-			window.trackCacheRequest(isHit, latency, tokensSaved, costSaved);
+			if (!response.ok) {
+				throw new Error(`API error: ${response.status} ${response.statusText}`);
+			}
+
+			const data = await response.json();
+			loading.classList.add('hidden');
+
+			// Extract response
+			const assistantMessage = data.choices[0].message.content;
+			const tokens = data.usage?.total_tokens || 0;
+			
+			// Detect cache hit from response timing (cache hits are <100ms)
+			const isHit = latency < 100;
+
+			// Add response
+			addChatbotMessage(assistantMessage, false, isHit, latency);
+
+			// Track metrics
+			if (window.trackCacheRequest) {
+				const tokensSaved = isHit ? tokens : 0;
+				const costSaved = isHit ? (tokens / 1000000) * 0.15 : 0;
+				window.trackCacheRequest(isHit, latency, tokensSaved, costSaved);
+			}
+		} catch (error) {
+			loading.classList.add('hidden');
+			addChatbotMessage(`Error: ${error.message}\n\nPlease ensure the VibeCache API is accessible at http://localhost:8081 or try again later.`, false, false, 0);
+			console.error('API Error:', error);
 		}
 	}
 

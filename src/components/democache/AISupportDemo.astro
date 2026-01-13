@@ -80,39 +80,24 @@
 </section>
 
 <script>
-	// Simulated responses for demo purposes
-	const supportResponses = {
-		"reset password": {
-			response: "To reset your password:\n\n1. Click 'Forgot Password' on the login page\n2. Enter your email address\n3. Check your email for a reset link\n4. Click the link and create a new password\n\nIf you don't receive the email within 5 minutes, check your spam folder or contact support@vibe.ai",
-			tokens: 150,
-		},
-		"pricing": {
-			response: "Our pricing plans are designed to scale with your needs:\n\n**Free Tier**: Up to 10K requests/month, perfect for testing\n**Pro**: $99/month for 1M requests with 68% cache savings\n**Enterprise**: Custom pricing with dedicated support and SLAs\n\nAll plans include semantic caching, multi-provider support, and real-time analytics. Contact us for a custom quote!",
-			tokens: 180,
-		},
-		"semantic caching": {
-			response: "Semantic caching works by understanding the *meaning* of queries, not just exact text matches:\n\n1. **Embedding Generation**: Queries are converted to 384-dimensional vectors\n2. **Similarity Search**: We find cached responses with ≥80% cosine similarity\n3. **Fast Retrieval**: Cache hits return in ~45ms vs ~1500ms for LLM calls\n4. **Cost Savings**: Achieve 68% cache hit rates, saving 70% on API costs\n\nThis means 'How do I reset my password?' and 'Password reset help' will both hit the cache!",
-			tokens: 200,
-		},
-		"api integration": {
-			response: "Integration is simple and OpenAI-compatible:\n\n```javascript\nconst response = await fetch('https://cache.vibe.ai/v1/chat/completions', {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'application/json',\n  },\n  body: JSON.stringify({\n    model: 'gpt-4o-mini',\n    messages: [{ role: 'user', content: 'Hello!' }]\n  })\n});\n```\n\nJust point to our endpoint and we handle the rest. Works with OpenAI, Anthropic, Google, and Cohere!",
-			tokens: 170,
-		},
-	};
+	// Real VibeCache API endpoint
+	const VIBECACHE_API = 'http://localhost:8081/v1/chat/completions';
+	const SUPPORT_MODEL = 'gpt-4o-mini';
 
-	function findBestMatch(question) {
-		const lowerQ = question.toLowerCase();
-		for (const [key, value] of Object.entries(supportResponses)) {
-			if (lowerQ.includes(key)) {
-				return value;
-			}
-		}
-		// Default response
-		return {
-			response: "Thanks for your question! While this is a demo with simulated responses, in production, VibeCache would intelligently cache your query and return results ~33× faster on subsequent similar questions. Try asking about pricing, password resets, semantic caching, or API integration!",
-			tokens: 120,
-		};
-	}
+	// System prompt for support bot
+	const SUPPORT_SYSTEM_PROMPT = `You are a helpful AI support assistant for VibeCache, a semantic caching service for AI applications. 
+	
+Key information about VibeCache:
+- Achieves 68% cache hit rates vs 10-15% for exact text matching
+- Cache hits return in ~45ms vs ~1500ms for LLM calls (33x faster)
+- Reduces API costs by 70% through intelligent semantic caching
+- Works with OpenAI, Anthropic, Google, and Cohere
+- Uses 384-dimensional embeddings with ≥0.80 cosine similarity threshold
+- Pricing: Free tier (10K requests/month), Pro ($99/month for 1M requests), Enterprise (custom)
+- API endpoint: https://cache.vibe.ai/v1/chat/completions (OpenAI-compatible)
+- Contact: support@vibe.ai
+
+Provide concise, helpful answers to customer questions about the product, billing, and technical issues.`;
 
 	function addMessage(text, isUser = false, isHit = false, latency = 0) {
 		const chatContainer = document.getElementById('support-chat');
@@ -170,27 +155,55 @@
 		const loading = document.getElementById('support-loading');
 		loading.classList.remove('hidden');
 
-		// Simulate cache check
-		const startTime = Date.now();
-		
-		// Random cache hit (70% hit rate for demo)
-		const isHit = Math.random() < 0.7;
-		const latency = isHit ? 40 + Math.random() * 20 : 1200 + Math.random() * 600;
-		
-		// Wait for simulated latency
-		await new Promise(resolve => setTimeout(resolve, latency));
-		
-		loading.classList.add('hidden');
+		try {
+			const startTime = performance.now();
+			
+			// Call real VibeCache API
+			const response = await fetch(VIBECACHE_API, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					model: SUPPORT_MODEL,
+					messages: [
+						{ role: 'system', content: SUPPORT_SYSTEM_PROMPT },
+						{ role: 'user', content: question }
+					],
+					temperature: 0.7,
+					max_tokens: 500
+				}),
+			});
 
-		// Get response
-		const match = findBestMatch(question);
-		addMessage(match.response, false, isHit, Math.round(latency));
+			const endTime = performance.now();
+			const latency = Math.round(endTime - startTime);
 
-		// Track metrics
-		if (window.trackCacheRequest) {
-			const tokensSaved = isHit ? match.tokens : 0;
-			const costSaved = isHit ? (match.tokens / 1000000) * 0.15 : 0; // $0.15 per 1M tokens
-			window.trackCacheRequest(isHit, latency, tokensSaved, costSaved);
+			if (!response.ok) {
+				throw new Error(`API error: ${response.status} ${response.statusText}`);
+			}
+
+			const data = await response.json();
+			loading.classList.add('hidden');
+
+			// Extract response
+			const assistantMessage = data.choices[0].message.content;
+			const tokens = data.usage?.total_tokens || 0;
+			
+			// Detect cache hit from response headers or timing (cache hits are <100ms)
+			const isHit = latency < 100;
+			
+			addMessage(assistantMessage, false, isHit, latency);
+
+			// Track metrics
+			if (window.trackCacheRequest) {
+				const tokensSaved = isHit ? tokens : 0;
+				const costSaved = isHit ? (tokens / 1000000) * 0.15 : 0; // $0.15 per 1M tokens for gpt-4o-mini
+				window.trackCacheRequest(isHit, latency, tokensSaved, costSaved);
+			}
+		} catch (error) {
+			loading.classList.add('hidden');
+			addMessage(`Error: ${error.message}\n\nPlease ensure the VibeCache API is accessible or try again later.`, false, false, 0);
+			console.error('API Error:', error);
 		}
 	}
 
