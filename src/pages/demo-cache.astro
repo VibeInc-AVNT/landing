@@ -1,10 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import DemoCacheHero from "@/components/democache/DemoCacheHero.astro";
-import AISupportDemo from "@/components/democache/AISupportDemo.astro";
-import ChatbotDemo from "@/components/democache/ChatbotDemo.astro";
-import CustomDemo from "@/components/democache/CustomDemo.astro";
-import CacheMetrics from "@/components/democache/CacheMetrics.astro";
+import ChatInterface from "@/components/democache/ChatInterface.astro";
 import type { AstroSeoProps } from "@astrolib/seo";
 
 const seo: AstroSeoProps = {
@@ -16,9 +12,5 @@ const seo: AstroSeoProps = {
 ---
 
 <BaseLayout seo={seo}>
-	<DemoCacheHero />
-	<CacheMetrics />
-	<AISupportDemo />
-	<ChatbotDemo />
-	<CustomDemo />
+	<ChatInterface />
 </BaseLayout>

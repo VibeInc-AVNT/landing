@@ -1,0 +1,416 @@
+---
+---
+
+<div class="fixed inset-0 z-50 bg-gray-50 pt-20">
+	<!-- Main Container -->
+	<div class="mx-auto flex h-full max-w-7xl">
+		<!-- Sidebar -->
+		<aside class="w-64 border-r-4 border-black bg-white">
+			<div class="p-6">
+				<h2 class="mb-6 font-display text-2xl font-bold text-gray-900">VibeCache Demo</h2>
+				
+				<!-- Chat Options -->
+				<nav class="space-y-2">
+					<button
+						id="chat-tab-support"
+						class="chat-tab active w-full rounded-lg border-4 border-black bg-vibe-purple px-4 py-3 text-left font-bold text-white transition-all hover:translate-x-1"
+						data-mode="support"
+					>
+						<div class="flex items-center gap-3">
+							<span class="text-xl">🎧</span>
+							<span>Support Bot</span>
+						</div>
+					</button>
+					
+					<button
+						id="chat-tab-general"
+						class="chat-tab w-full rounded-lg border-4 border-black bg-white px-4 py-3 text-left font-bold text-gray-900 transition-all hover:translate-x-1"
+						data-mode="general"
+					>
+						<div class="flex items-center gap-3">
+							<span class="text-xl">💬</span>
+							<span>General Chat</span>
+						</div>
+					</button>
+					
+					<button
+						id="chat-tab-custom"
+						class="chat-tab w-full rounded-lg border-4 border-black bg-white px-4 py-3 text-left font-bold text-gray-900 transition-all hover:translate-x-1"
+						data-mode="custom"
+					>
+						<div class="flex items-center gap-3">
+							<span class="text-xl">⚙️</span>
+							<span>Custom API</span>
+						</div>
+					</button>
+				</nav>
+
+				<!-- Metrics Summary -->
+				<div class="mt-8 space-y-3">
+					<div class="rounded-lg border-2 border-black bg-vibe-yellow/10 p-3">
+						<div class="text-xs font-bold text-gray-600 uppercase">Hit Rate</div>
+						<div id="sidebar-hit-rate" class="text-2xl font-bold text-vibe-purple">0%</div>
+					</div>
+					
+					<div class="rounded-lg border-2 border-black bg-vibe-orange/10 p-3">
+						<div class="text-xs font-bold text-gray-600 uppercase">Avg Latency</div>
+						<div id="sidebar-latency" class="text-2xl font-bold text-vibe-orange">0ms</div>
+					</div>
+					
+					<div class="rounded-lg border-2 border-black bg-vibe-red/10 p-3">
+						<div class="text-xs font-bold text-gray-600 uppercase">Saved</div>
+						<div id="sidebar-cost" class="text-2xl font-bold text-vibe-red">$0.00</div>
+					</div>
+				</div>
+			</div>
+		</aside>
+
+		<!-- Chat Area -->
+		<main class="flex flex-1 flex-col">
+			<!-- Header -->
+			<header class="border-b-4 border-black bg-white px-6 py-4">
+				<div class="flex items-center justify-between">
+					<div>
+						<h1 id="chat-title" class="font-display text-2xl font-bold text-gray-900">Support Bot</h1>
+						<p id="chat-description" class="text-sm text-gray-600">Ask common questions about VibeCache</p>
+					</div>
+					<div class="flex items-center gap-2">
+						<span id="connection-indicator" class="flex items-center gap-2 rounded-full border-2 border-black bg-gray-100 px-3 py-1 text-sm font-bold">
+							<span class="h-2 w-2 rounded-full bg-gray-400"></span>
+							Ready
+						</span>
+					</div>
+				</div>
+			</header>
+
+			<!-- Messages Container -->
+			<div id="messages-container" class="flex-1 overflow-y-auto p-6">
+				<!-- Messages will be inserted here -->
+			</div>
+
+			<!-- Input Area -->
+			<div class="border-t-4 border-black bg-white p-6">
+				<!-- Quick Actions (shown for support/general modes) -->
+				<div id="quick-actions" class="mb-4 flex flex-wrap gap-2">
+					<!-- Quick action buttons will be inserted here -->
+				</div>
+
+				<!-- Custom Settings (shown for custom mode) -->
+				<div id="custom-settings" class="mb-4 hidden space-y-3">
+					<div class="grid gap-3 md:grid-cols-2">
+						<input
+							type="url"
+							id="custom-url"
+							placeholder="http://localhost:8081/v1/chat/completions"
+							value="http://localhost:8081/v1/chat/completions"
+							class="rounded-lg border-4 border-black px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-vibe-purple"
+						/>
+						<select
+							id="custom-model"
+							class="rounded-lg border-4 border-black px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-vibe-purple"
+						>
+							<option value="gpt-4o-mini">GPT-4o Mini</option>
+							<option value="gpt-4o">GPT-4o</option>
+							<option value="claude-3-haiku-20240307">Claude 3 Haiku</option>
+							<option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
+							<option value="gemini-2.0-flash-exp">Gemini 2.0 Flash</option>
+							<option value="command-r">Command R</option>
+							<option value="z-alpha">Z-Alpha</option>
+							<option value="z-beta">Z-Beta</option>
+						</select>
+					</div>
+				</div>
+
+				<!-- Input Box -->
+				<div class="flex gap-3">
+					<input
+						type="text"
+						id="message-input"
+						placeholder="Type your message..."
+						class="flex-1 rounded-lg border-4 border-black px-4 py-3 focus:outline-none focus:ring-2 focus:ring-vibe-purple"
+					/>
+					<button
+						id="send-button"
+						class="rounded-lg border-4 border-black bg-vibe-purple px-6 py-3 font-bold text-white transition-all hover:translate-y-[-2px] hover:shadow-[0_6px_0_0_#000]"
+					>
+						Send
+					</button>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>
+
+<script>
+	// Real VibeCache API endpoint
+	const VIBECACHE_API = 'http://localhost:8081/v1/chat/completions';
+
+	// Chat modes
+	let currentMode = 'support';
+	let customEndpoint = 'http://localhost:8081/v1/chat/completions';
+	let customModel = 'gpt-4o-mini';
+
+	// System prompts
+	const SYSTEM_PROMPTS = {
+		support: `You are a helpful AI support assistant for VibeCache, a semantic caching service for AI applications. 
+
+Key information:
+- 68% cache hit rates vs 10-15% for exact matching
+- Cache hits: ~45ms vs ~1500ms for LLM calls (33x faster)
+- Reduces API costs by 70%
+- Works with OpenAI, Anthropic, Google, Cohere
+- API: http://localhost:8081/v1/chat/completions
+
+Provide concise, helpful answers.`,
+		general: `You are a knowledgeable AI assistant. Provide clear, informative responses on various topics. Keep answers concise but comprehensive.`,
+		custom: `You are a helpful AI assistant.`
+	};
+
+	// Quick actions
+	const QUICK_ACTIONS = {
+		support: [
+			{ label: 'Pricing Plans', query: 'What are your pricing plans?' },
+			{ label: 'How It Works', query: 'How does semantic caching work?' },
+			{ label: 'API Integration', query: 'How do I integrate the API?' },
+		],
+		general: [
+			{ label: 'Quantum Computing', query: 'Explain quantum computing' },
+			{ label: 'Machine Learning', query: 'What is machine learning?' },
+			{ label: 'Semantic Caching', query: 'Tell me about semantic caching' },
+		],
+		custom: []
+	};
+
+	// Metrics tracking
+	const metrics = {
+		totalRequests: 0,
+		cacheHits: 0,
+		cacheMisses: 0,
+		costSaved: 0,
+		latencies: []
+	};
+
+	function updateMetrics() {
+		const hitRate = metrics.totalRequests > 0 
+			? ((metrics.cacheHits / metrics.totalRequests) * 100).toFixed(1)
+			: 0;
+		const avgLatency = metrics.latencies.length > 0
+			? Math.round(metrics.latencies.reduce((a, b) => a + b, 0) / metrics.latencies.length)
+			: 0;
+
+		document.getElementById('sidebar-hit-rate').textContent = `${hitRate}%`;
+		document.getElementById('sidebar-latency').textContent = `${avgLatency}ms`;
+		document.getElementById('sidebar-cost').textContent = `$${metrics.costSaved.toFixed(4)}`;
+	}
+
+	function switchMode(mode) {
+		currentMode = mode;
+		
+		// Update tabs
+		document.querySelectorAll('.chat-tab').forEach(tab => {
+			tab.classList.remove('active', 'bg-vibe-purple', 'text-white');
+			tab.classList.add('bg-white', 'text-gray-900');
+		});
+		
+		const activeTab = document.querySelector(`[data-mode="${mode}"]`);
+		activeTab.classList.add('active', 'bg-vibe-purple', 'text-white');
+		activeTab.classList.remove('bg-white', 'text-gray-900');
+
+		// Update header
+		const titles = {
+			support: 'Support Bot',
+			general: 'General Chat',
+			custom: 'Custom API Chat'
+		};
+		const descriptions = {
+			support: 'Ask common questions about VibeCache',
+			general: 'Chat about any topic',
+			custom: 'Test your own VibeCache endpoint'
+		};
+
+		document.getElementById('chat-title').textContent = titles[mode];
+		document.getElementById('chat-description').textContent = descriptions[mode];
+
+		// Update quick actions/settings
+		const quickActions = document.getElementById('quick-actions');
+		const customSettings = document.getElementById('custom-settings');
+		
+		if (mode === 'custom') {
+			quickActions.classList.add('hidden');
+			customSettings.classList.remove('hidden');
+		} else {
+			quickActions.classList.remove('hidden');
+			customSettings.classList.add('hidden');
+			renderQuickActions(mode);
+		}
+
+		// Clear messages
+		document.getElementById('messages-container').innerHTML = '';
+		addWelcomeMessage(mode);
+	}
+
+	function renderQuickActions(mode) {
+		const container = document.getElementById('quick-actions');
+		container.innerHTML = '';
+		
+		QUICK_ACTIONS[mode].forEach(action => {
+			const btn = document.createElement('button');
+			btn.className = 'rounded-lg border-2 border-black bg-vibe-yellow px-4 py-2 text-sm font-bold transition-all hover:translate-y-[-2px] hover:shadow-[0_4px_0_0_#000]';
+			btn.textContent = action.label;
+			btn.onclick = () => sendMessage(action.query);
+			container.appendChild(btn);
+		});
+	}
+
+	function addWelcomeMessage(mode) {
+		const messages = {
+			support: '👋 Hi! I\'m your VibeCache support assistant. Ask me anything!',
+			general: '💬 Hello! I\'m here to chat about any topic. What would you like to know?',
+			custom: '⚙️ Configure your endpoint above and start testing!'
+		};
+		
+		addMessage(messages[mode], false, null, 0);
+	}
+
+	function addMessage(text, isUser, isHit = null, latency = 0) {
+		const container = document.getElementById('messages-container');
+		const messageDiv = document.createElement('div');
+		messageDiv.className = `flex gap-3 ${isUser ? 'justify-end' : ''}`;
+
+		const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+		if (isUser) {
+			messageDiv.innerHTML = `
+				<div class="max-w-[70%]">
+					<div class="rounded-lg border-4 border-black bg-vibe-purple px-4 py-3 text-white">
+						<p class="text-sm">${text}</p>
+					</div>
+					<div class="mt-1 text-right text-xs text-gray-500">${time}</div>
+				</div>
+			`;
+		} else {
+			const badge = isHit !== null
+				? isHit
+					? `<span class="inline-flex items-center gap-1 rounded-full bg-vibe-yellow px-2 py-1 text-xs font-bold text-vibe-purple">⚡ ${latency}ms</span>`
+					: `<span class="inline-flex items-center gap-1 rounded-full bg-gray-300 px-2 py-1 text-xs font-bold text-gray-700">🔄 ${latency}ms</span>`
+				: '';
+
+			messageDiv.innerHTML = `
+				<div class="max-w-[70%]">
+					<div class="rounded-lg border-4 border-black bg-white px-4 py-3">
+						<p class="text-sm" style="white-space: pre-line;">${text}</p>
+					</div>
+					<div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
+						<span>${time}</span>
+						${badge}
+					</div>
+				</div>
+			`;
+		}
+
+		container.appendChild(messageDiv);
+		container.scrollTop = container.scrollHeight;
+	}
+
+	async function sendMessage(message = null) {
+		const input = document.getElementById('message-input');
+		const text = message || input.value.trim();
+		
+		if (!text) return;
+
+		input.value = '';
+		addMessage(text, true);
+
+		// Show loading indicator
+		const indicator = document.getElementById('connection-indicator');
+		indicator.innerHTML = '<span class="h-2 w-2 animate-spin rounded-full border-2 border-vibe-purple border-t-transparent"></span> Thinking...';
+
+		try {
+			const startTime = performance.now();
+			
+			const endpoint = currentMode === 'custom' ? customEndpoint : VIBECACHE_API;
+			const model = currentMode === 'custom' ? customModel : 'gpt-4o-mini';
+			const systemPrompt = SYSTEM_PROMPTS[currentMode];
+
+			const response = await fetch(endpoint, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					model: model,
+					messages: [
+						{ role: 'system', content: systemPrompt },
+						{ role: 'user', content: text }
+					],
+					temperature: 0.7,
+					max_tokens: 500
+				}),
+			});
+
+			const endTime = performance.now();
+			const latency = Math.round(endTime - startTime);
+
+			if (!response.ok) {
+				throw new Error(`API error: ${response.status}`);
+			}
+
+			const data = await response.json();
+			const assistantMessage = data.choices[0].message.content;
+			const tokens = data.usage?.total_tokens || 0;
+			const isHit = latency < 100;
+
+			addMessage(assistantMessage, false, isHit, latency);
+
+			// Update metrics
+			metrics.totalRequests++;
+			if (isHit) {
+				metrics.cacheHits++;
+				metrics.costSaved += (tokens / 1000000) * 0.15;
+			} else {
+				metrics.cacheMisses++;
+			}
+			metrics.latencies.push(latency);
+			updateMetrics();
+
+			indicator.innerHTML = '<span class="h-2 w-2 rounded-full bg-green-500"></span> Connected';
+		} catch (error) {
+			addMessage(`Error: ${error.message}. Ensure VibeCache is running on localhost:8081.`, false, false, 0);
+			indicator.innerHTML = '<span class="h-2 w-2 rounded-full bg-red-500"></span> Error';
+		}
+	}
+
+	// Initialize
+	document.addEventListener('DOMContentLoaded', () => {
+		// Tab switching
+		document.querySelectorAll('.chat-tab').forEach(tab => {
+			tab.addEventListener('click', () => {
+				switchMode(tab.dataset.mode);
+			});
+		});
+
+		// Send button
+		document.getElementById('send-button').addEventListener('click', () => sendMessage());
+
+		// Enter key
+		document.getElementById('message-input').addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') sendMessage();
+		});
+
+		// Custom settings
+		document.getElementById('custom-url').addEventListener('change', (e) => {
+			customEndpoint = e.target.value;
+		});
+
+		document.getElementById('custom-model').addEventListener('change', (e) => {
+			customModel = e.target.value;
+		});
+
+		// Initialize with support mode
+		switchMode('support');
+	});
+</script>
+
+<style>
+	.chat-tab.active {
+		box-shadow: 6px 6px 0 0 #000;
+	}
+</style>
