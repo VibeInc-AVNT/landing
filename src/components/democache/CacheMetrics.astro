@@ -1,0 +1,143 @@
+---
+---
+
+<section id="cache-metrics" class="section relative bg-gray-50 py-16">
+	<div class="col-span-12">
+		<h2 class="mb-8 text-center font-display text-3xl font-bold uppercase text-gray-900 md:text-4xl">
+			Real-Time Cache Performance
+		</h2>
+
+		<div class="mx-auto max-w-5xl grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+			<!-- Total Requests -->
+			<div class="neo-card bg-white p-6 text-center">
+				<div class="mb-2 text-sm font-bold text-gray-600 uppercase">Total Requests</div>
+				<div id="metric-total-requests" class="text-4xl font-bold text-vibe-purple">0</div>
+			</div>
+
+			<!-- Cache Hit Rate -->
+			<div class="neo-card bg-white p-6 text-center">
+				<div class="mb-2 text-sm font-bold text-gray-600 uppercase">Hit Rate</div>
+				<div id="metric-hit-rate" class="text-4xl font-bold text-vibe-yellow">0%</div>
+			</div>
+
+			<!-- Avg Latency -->
+			<div class="neo-card bg-white p-6 text-center">
+				<div class="mb-2 text-sm font-bold text-gray-600 uppercase">Avg Latency</div>
+				<div id="metric-avg-latency" class="text-4xl font-bold text-vibe-orange">0ms</div>
+			</div>
+
+			<!-- Cost Saved -->
+			<div class="neo-card bg-white p-6 text-center">
+				<div class="mb-2 text-sm font-bold text-gray-600 uppercase">Cost Saved</div>
+				<div id="metric-cost-saved" class="text-4xl font-bold text-vibe-red">$0.00</div>
+			</div>
+		</div>
+
+		<!-- Detailed Stats -->
+		<div class="mx-auto max-w-5xl mt-8 neo-card bg-white p-6">
+			<h3 class="mb-4 text-xl font-bold text-gray-900">Session Statistics</h3>
+			<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+				<div>
+					<div class="text-sm text-gray-600">Cache Hits</div>
+					<div id="metric-cache-hits" class="text-2xl font-bold text-vibe-purple">0</div>
+				</div>
+				<div>
+					<div class="text-sm text-gray-600">Cache Misses</div>
+					<div id="metric-cache-misses" class="text-2xl font-bold text-gray-600">0</div>
+				</div>
+				<div>
+					<div class="text-sm text-gray-600">Tokens Saved</div>
+					<div id="metric-tokens-saved" class="text-2xl font-bold text-vibe-yellow">0</div>
+				</div>
+				<div>
+					<div class="text-sm text-gray-600">Cache Latency</div>
+					<div id="metric-cache-latency" class="text-2xl font-bold text-vibe-orange">~45ms</div>
+				</div>
+				<div>
+					<div class="text-sm text-gray-600">LLM Latency</div>
+					<div id="metric-llm-latency" class="text-2xl font-bold text-gray-600">~1500ms</div>
+				</div>
+				<div>
+					<div class="text-sm text-gray-600">Speedup</div>
+					<div id="metric-speedup" class="text-2xl font-bold text-vibe-red">0×</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	// Global metrics state
+	window.cacheMetrics = {
+		totalRequests: 0,
+		cacheHits: 0,
+		cacheMisses: 0,
+		tokensSaved: 0,
+		costSaved: 0,
+		cacheLatencies: [],
+		llmLatencies: [],
+	};
+
+	function updateMetrics() {
+		const metrics = window.cacheMetrics;
+		
+		// Calculate hit rate
+		const hitRate = metrics.totalRequests > 0 
+			? ((metrics.cacheHits / metrics.totalRequests) * 100).toFixed(1)
+			: 0;
+
+		// Calculate average latency
+		const allLatencies = [...metrics.cacheLatencies, ...metrics.llmLatencies];
+		const avgLatency = allLatencies.length > 0
+			? Math.round(allLatencies.reduce((a, b) => a + b, 0) / allLatencies.length)
+			: 0;
+
+		// Calculate average cache latency
+		const avgCacheLatency = metrics.cacheLatencies.length > 0
+			? Math.round(metrics.cacheLatencies.reduce((a, b) => a + b, 0) / metrics.cacheLatencies.length)
+			: 45;
+
+		// Calculate average LLM latency
+		const avgLlmLatency = metrics.llmLatencies.length > 0
+			? Math.round(metrics.llmLatencies.reduce((a, b) => a + b, 0) / metrics.llmLatencies.length)
+			: 1500;
+
+		// Calculate speedup
+		const speedup = avgLlmLatency > 0 && avgCacheLatency > 0
+			? (avgLlmLatency / avgCacheLatency).toFixed(1)
+			: 0;
+
+		// Update DOM
+		document.getElementById('metric-total-requests').textContent = metrics.totalRequests.toString();
+		document.getElementById('metric-hit-rate').textContent = `${hitRate}%`;
+		document.getElementById('metric-avg-latency').textContent = `${avgLatency}ms`;
+		document.getElementById('metric-cost-saved').textContent = `$${metrics.costSaved.toFixed(4)}`;
+		document.getElementById('metric-cache-hits').textContent = metrics.cacheHits.toString();
+		document.getElementById('metric-cache-misses').textContent = metrics.cacheMisses.toString();
+		document.getElementById('metric-tokens-saved').textContent = metrics.tokensSaved.toString();
+		document.getElementById('metric-cache-latency').textContent = `~${avgCacheLatency}ms`;
+		document.getElementById('metric-llm-latency').textContent = `~${avgLlmLatency}ms`;
+		document.getElementById('metric-speedup').textContent = `${speedup}×`;
+	}
+
+	// Add a helper to track requests
+	window.trackCacheRequest = function(wasHit, latency, tokensSaved = 0, costSaved = 0) {
+		const metrics = window.cacheMetrics;
+		metrics.totalRequests++;
+		
+		if (wasHit) {
+			metrics.cacheHits++;
+			metrics.cacheLatencies.push(latency);
+			metrics.tokensSaved += tokensSaved;
+			metrics.costSaved += costSaved;
+		} else {
+			metrics.cacheMisses++;
+			metrics.llmLatencies.push(latency);
+		}
+
+		updateMetrics();
+	};
+
+	// Initialize on load
+	document.addEventListener('DOMContentLoaded', updateMetrics);
+</script>

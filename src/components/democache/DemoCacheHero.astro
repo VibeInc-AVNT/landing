@@ -1,0 +1,141 @@
+---
+---
+
+<section id="demo-hero" class="section hero relative min-h-[60vh] overflow-hidden bg-white">
+	<div class="relative z-10 mx-auto flex h-full flex-col py-4 lg:py-10">
+		<div class="relative flex flex-1 flex-col justify-center pb-10 pt-24 lg:pt-16">
+			<!-- Main headline -->
+			<div class="hero-content flex justify-center">
+				<h1 class="hero-title text-center font-display text-5xl font-extrabold leading-[0.9] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
+					<span class="block overflow-hidden">
+						<span class="line-1 inline-block text-gray-900">VibeCache</span>
+					</span>
+					<span class="block overflow-hidden mt-4">
+						<span class="line-2 inline-block text-vibe-purple font-semibold">Live Demo</span>
+					</span>
+				</h1>
+			</div>
+
+			<!-- Subtitle -->
+			<div class="hero-subtitle mt-8 flex flex-col items-center gap-6 text-center lg:mt-12">
+				<p class="max-w-2xl text-lg text-gray-600 md:text-xl">
+					Experience semantic caching in real-time. Watch how VibeCache reduces latency by <strong class="text-vibe-purple">40×</strong> and cuts costs by <strong class="text-vibe-purple">70%</strong>.
+				</p>
+
+				<!-- Key stats -->
+				<div class="flex flex-wrap justify-center gap-6 mt-4">
+					<div class="flex flex-col items-center">
+						<div class="text-3xl font-bold text-vibe-purple">68%</div>
+						<div class="text-sm text-gray-600">Cache Hit Rate</div>
+					</div>
+					<div class="flex flex-col items-center">
+						<div class="text-3xl font-bold text-vibe-orange">~45ms</div>
+						<div class="text-sm text-gray-600">Cache Latency</div>
+					</div>
+					<div class="flex flex-col items-center">
+						<div class="text-3xl font-bold text-vibe-yellow">40×</div>
+						<div class="text-sm text-gray-600">Faster</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Scroll indicator -->
+			<div class="hero-scroll mt-16 flex justify-center lg:mt-20">
+				<button id="scroll-to-demos" class="flex flex-col items-center gap-2 text-gray-400 transition-colors hover:text-vibe-purple">
+					<span class="text-sm">Try the demos</span>
+					<svg class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Decorative elements -->
+	<div class="pointer-events-none absolute inset-0 overflow-hidden">
+		<div class="absolute -right-40 -top-40 h-80 w-80 rounded-full bg-vibe-yellow/10 blur-3xl"></div>
+		<div class="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-vibe-purple/10 blur-3xl"></div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		padding-bottom: 0;
+	}
+	.hero > div {
+		grid-column: 1 / span 12;
+	}
+
+	/* Initial states for animations */
+	.line-1, .line-2 {
+		opacity: 0;
+		transform: translateY(100%);
+	}
+
+	.hero-subtitle, .hero-scroll {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+
+	/* Animation keyframes */
+	@keyframes slideUp {
+		from {
+			opacity: 0;
+			transform: translateY(100%);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Apply animations */
+	.hero.animated .line-1 {
+		animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	}
+
+	.hero.animated .line-2 {
+		animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+	}
+
+	.hero.animated .hero-subtitle {
+		animation: fadeInUp 0.8s ease-out 0.5s forwards;
+	}
+
+	.hero.animated .hero-scroll {
+		animation: fadeInUp 0.8s ease-out 0.7s forwards;
+	}
+</style>
+
+<script>
+	function init() {
+		// Trigger animations on load
+		const hero = document.querySelector('.hero');
+		if (hero) {
+			setTimeout(() => {
+				hero.classList.add('animated');
+			}, 100);
+		}
+
+		// Scroll button
+		const scrollBtn = document.getElementById('scroll-to-demos');
+		scrollBtn?.addEventListener('click', () => {
+			const nextSection = document.getElementById('cache-metrics');
+			nextSection?.scrollIntoView({ behavior: 'smooth' });
+		});
+	}
+
+	document.removeEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', init);
+</script>

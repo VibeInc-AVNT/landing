@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import DemoCacheHero from "@/components/democache/DemoCacheHero.astro";
+import AISupportDemo from "@/components/democache/AISupportDemo.astro";
+import ChatbotDemo from "@/components/democache/ChatbotDemo.astro";
+import CustomDemo from "@/components/democache/CustomDemo.astro";
+import CacheMetrics from "@/components/democache/CacheMetrics.astro";
+import type { AstroSeoProps } from "@astrolib/seo";
+
+const seo: AstroSeoProps = {
+	title: "Demo Cache - Vibe",
+	description:
+		"Experience VibeCache in real-time. See semantic caching in action with our AI support bot and chatbot demos.",
+	canonical: "https://vibe.avunite.com/demo-cache/",
+};
+---
+
+<BaseLayout seo={seo}>
+	<DemoCacheHero />
+	<CacheMetrics />
+	<AISupportDemo />
+	<ChatbotDemo />
+	<CustomDemo />
+</BaseLayout>

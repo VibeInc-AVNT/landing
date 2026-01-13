@@ -1,0 +1,330 @@
+---
+---
+
+<section id="custom-demo" class="section relative bg-white py-16">
+	<div class="col-span-12">
+		<div class="mx-auto max-w-4xl">
+			<!-- Section Header -->
+			<div class="mb-8 text-center">
+				<h2 class="font-display text-3xl font-bold uppercase text-gray-900 md:text-4xl">
+					Custom Demo URL
+				</h2>
+				<p class="mt-4 text-gray-600">
+					Point to your own VibeCache instance or test with a custom endpoint.
+				</p>
+			</div>
+
+			<!-- Custom URL Configuration -->
+			<div class="neo-card bg-gray-50 p-6 lg:p-8 mb-8">
+				<div class="mb-6">
+					<label for="custom-url" class="mb-2 block text-sm font-bold text-gray-700">
+						API Endpoint URL
+					</label>
+					<div class="flex gap-3">
+						<input
+							type="url"
+							id="custom-url"
+							placeholder="https://cache.vibe.ai/v1/chat/completions"
+							value="https://cache.vibe.ai/v1/chat/completions"
+							class="flex-1 rounded-lg border-4 border-black px-4 py-3 focus:outline-none focus:ring-2 focus:ring-vibe-purple"
+						/>
+						<button
+							id="test-connection-btn"
+							class="neo-btn bg-vibe-yellow px-6 py-3 font-bold hover:bg-vibe-yellow-600"
+						>
+							Test
+						</button>
+					</div>
+					<p class="mt-2 text-xs text-gray-600">
+						Enter your VibeCache endpoint. Leave default for demo mode with simulated responses.
+					</p>
+				</div>
+
+				<!-- API Key (optional) -->
+				<div class="mb-6">
+					<label for="custom-api-key" class="mb-2 block text-sm font-bold text-gray-700">
+						API Key (Optional)
+					</label>
+					<input
+						type="password"
+						id="custom-api-key"
+						placeholder="sk-..."
+						class="w-full rounded-lg border-4 border-black px-4 py-3 focus:outline-none focus:ring-2 focus:ring-vibe-purple"
+					/>
+					<p class="mt-2 text-xs text-gray-600">
+						If your endpoint requires authentication, enter your API key here.
+					</p>
+				</div>
+
+				<!-- Model Selection -->
+				<div class="mb-6">
+					<label for="custom-model" class="mb-2 block text-sm font-bold text-gray-700">
+						Model
+					</label>
+					<select
+						id="custom-model"
+						class="w-full rounded-lg border-4 border-black px-4 py-3 focus:outline-none focus:ring-2 focus:ring-vibe-purple"
+					>
+						<option value="gpt-4o-mini">GPT-4o Mini (OpenAI)</option>
+						<option value="gpt-4o">GPT-4o (OpenAI)</option>
+						<option value="claude-3-haiku-20240307">Claude 3 Haiku (Anthropic)</option>
+						<option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet (Anthropic)</option>
+						<option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Google)</option>
+						<option value="command-r">Command R (Cohere)</option>
+					</select>
+					<p class="mt-2 text-xs text-gray-600">
+						VibeCache auto-detects the provider based on model name prefix.
+					</p>
+				</div>
+
+				<!-- Connection Status -->
+				<div id="connection-status" class="hidden rounded-lg p-4">
+					<!-- Status will be injected here -->
+				</div>
+			</div>
+
+			<!-- Custom Chat Interface -->
+			<div class="neo-card bg-white p-6 lg:p-8">
+				<!-- Chat messages -->
+				<div id="custom-chat" class="mb-6 h-96 overflow-y-auto rounded-lg bg-gray-50 p-4 space-y-4">
+					<!-- Welcome message -->
+					<div class="flex gap-3">
+						<div class="flex-shrink-0 w-8 h-8 rounded-full bg-vibe-red flex items-center justify-center text-white font-bold">
+							⚙️
+						</div>
+						<div class="flex-1">
+							<div class="neo-card bg-white p-3 text-sm">
+								<p>Configure your custom endpoint above and start chatting! In demo mode, responses are simulated. With a real endpoint, you'll see actual VibeCache performance.</p>
+							</div>
+							<div class="mt-1 text-xs text-gray-500">Just now</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Input area -->
+				<div class="flex gap-3">
+					<input
+						type="text"
+						id="custom-input"
+						placeholder="Send a message to your custom endpoint..."
+						class="flex-1 rounded-lg border-4 border-black px-4 py-3 focus:outline-none focus:ring-2 focus:ring-vibe-red"
+					/>
+					<button
+						id="custom-send-btn"
+						class="neo-btn bg-vibe-red px-6 py-3 font-bold text-white hover:bg-vibe-red-600"
+					>
+						Send
+					</button>
+				</div>
+
+				<!-- Loading indicator -->
+				<div id="custom-loading" class="mt-4 hidden">
+					<div class="flex items-center gap-2 text-sm text-gray-600">
+						<div class="h-4 w-4 animate-spin rounded-full border-2 border-vibe-red border-t-transparent"></div>
+						<span>Sending request...</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- OpenAPI Reference -->
+			<div class="mt-6 neo-card bg-vibe-indigo/10 p-4">
+				<details>
+					<summary class="cursor-pointer font-bold text-gray-900">📖 API Reference</summary>
+					<div class="mt-4 text-sm space-y-2">
+						<p><strong>Endpoint:</strong> POST /v1/chat/completions</p>
+						<p><strong>Request Body:</strong></p>
+						<pre class="overflow-x-auto rounded bg-gray-800 p-3 text-xs text-white"><code>&#123;
+  "model": "gpt-4o-mini",
+  "messages": [
+    &#123; "role": "user", "content": "Hello!" &#125;
+  ]
+&#125;</code></pre>
+						<p><strong>Response:</strong> OpenAI-compatible chat completion with cache metadata</p>
+						<p class="text-gray-600">See full OpenAPI spec in the problem statement for complete API documentation.</p>
+					</div>
+				</details>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	let customEndpoint = 'https://cache.vibe.ai/v1/chat/completions';
+	let customApiKey = '';
+	let customModel = 'gpt-4o-mini';
+	let isConnected = false;
+
+	function showConnectionStatus(success, message) {
+		const statusDiv = document.getElementById('connection-status');
+		statusDiv.classList.remove('hidden');
+		
+		if (success) {
+			statusDiv.className = 'rounded-lg bg-green-50 border-4 border-green-500 p-4';
+			statusDiv.innerHTML = `
+				<div class="flex items-center gap-2">
+					<span class="text-2xl">✅</span>
+					<div>
+						<div class="font-bold text-green-900">Connection Successful</div>
+						<div class="text-sm text-green-700">${message}</div>
+					</div>
+				</div>
+			`;
+			isConnected = true;
+		} else {
+			statusDiv.className = 'rounded-lg bg-red-50 border-4 border-red-500 p-4';
+			statusDiv.innerHTML = `
+				<div class="flex items-center gap-2">
+					<span class="text-2xl">❌</span>
+					<div>
+						<div class="font-bold text-red-900">Connection Failed</div>
+						<div class="text-sm text-red-700">${message}</div>
+					</div>
+				</div>
+			`;
+			isConnected = false;
+		}
+	}
+
+	async function testConnection() {
+		const url = document.getElementById('custom-url').value;
+		const apiKey = document.getElementById('custom-api-key').value;
+		const model = document.getElementById('custom-model').value;
+
+		customEndpoint = url;
+		customApiKey = apiKey;
+		customModel = model;
+
+		// For demo purposes, simulate connection test
+		showConnectionStatus(false, 'Demo mode - using simulated responses. Enter a real VibeCache endpoint to test actual API calls.');
+		
+		// In production, this would make an actual API call to test the connection
+	}
+
+	function addCustomMessage(text, isUser = false, isHit = false, latency = 0, metadata = null) {
+		const chatContainer = document.getElementById('custom-chat');
+		const messageDiv = document.createElement('div');
+		messageDiv.className = 'flex gap-3';
+		
+		const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		
+		if (isUser) {
+			messageDiv.innerHTML = `
+				<div class="flex-1"></div>
+				<div class="flex-shrink-0 w-full max-w-[80%]">
+					<div class="neo-card bg-vibe-red text-white p-3 text-sm ml-auto">
+						<p>${text}</p>
+					</div>
+					<div class="mt-1 text-xs text-gray-500 text-right">${time}</div>
+				</div>
+			`;
+		} else {
+			const badge = isHit 
+				? `<span class="inline-flex items-center gap-1 rounded-full bg-vibe-yellow px-2 py-1 text-xs font-bold text-vibe-purple">⚡ Cache Hit • ${latency}ms</span>`
+				: `<span class="inline-flex items-center gap-1 rounded-full bg-gray-300 px-2 py-1 text-xs font-bold text-gray-700">🔄 Cache Miss • ${latency}ms</span>`;
+			
+			const metadataHtml = metadata ? `
+				<div class="mt-2 text-xs text-gray-600">
+					<div>Model: ${metadata.model}</div>
+					<div>Tokens: ${metadata.tokens}</div>
+				</div>
+			` : '';
+			
+			messageDiv.innerHTML = `
+				<div class="flex-shrink-0 w-8 h-8 rounded-full bg-vibe-red flex items-center justify-center text-white font-bold">
+					⚙️
+				</div>
+				<div class="flex-1">
+					<div class="neo-card bg-white p-3 text-sm">
+						<p style="white-space: pre-line;">${text}</p>
+						${metadataHtml}
+					</div>
+					<div class="mt-1 flex items-center gap-2">
+						<span class="text-xs text-gray-500">${time}</span>
+						${badge}
+					</div>
+				</div>
+			`;
+		}
+		
+		chatContainer.appendChild(messageDiv);
+		chatContainer.scrollTop = chatContainer.scrollHeight;
+	}
+
+	async function sendCustomMessage(message) {
+		if (!message.trim()) return;
+
+		// Clear input
+		const input = document.getElementById('custom-input');
+		input.value = '';
+
+		// Add user message
+		addCustomMessage(message, true);
+
+		// Show loading
+		const loading = document.getElementById('custom-loading');
+		loading.classList.remove('hidden');
+
+		// Simulate API call (in production, this would be a real fetch)
+		const startTime = Date.now();
+		const isHit = Math.random() < 0.68;
+		const latency = isHit ? 40 + Math.random() * 25 : 1100 + Math.random() * 800;
+		
+		await new Promise(resolve => setTimeout(resolve, latency));
+		
+		loading.classList.add('hidden');
+
+		// Generate demo response
+		const response = `This is a simulated response to: "${message}"\n\nIn demo mode, responses are generated locally. Configure a real VibeCache endpoint above to see actual API performance with semantic caching.\n\nYour query would be converted to a 384-dimensional embedding and checked against the cache with a similarity threshold of ≥0.80. ${isHit ? 'This was a simulated cache hit! ⚡' : 'This was a simulated cache miss.'}`;
+		
+		const tokens = 100 + Math.floor(Math.random() * 150);
+		
+		addCustomMessage(response, false, isHit, Math.round(latency), {
+			model: customModel,
+			tokens: tokens,
+		});
+
+		// Track metrics
+		if (window.trackCacheRequest) {
+			const tokensSaved = isHit ? tokens : 0;
+			const costSaved = isHit ? (tokens / 1000000) * 0.15 : 0;
+			window.trackCacheRequest(isHit, latency, tokensSaved, costSaved);
+		}
+	}
+
+	function init() {
+		const urlInput = document.getElementById('custom-url');
+		const apiKeyInput = document.getElementById('custom-api-key');
+		const modelSelect = document.getElementById('custom-model');
+		const testBtn = document.getElementById('test-connection-btn');
+		const input = document.getElementById('custom-input');
+		const sendBtn = document.getElementById('custom-send-btn');
+
+		testBtn.addEventListener('click', testConnection);
+
+		sendBtn.addEventListener('click', () => {
+			sendCustomMessage(input.value);
+		});
+
+		input.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') {
+				sendCustomMessage(input.value);
+			}
+		});
+
+		// Update config on change
+		urlInput.addEventListener('change', () => {
+			customEndpoint = urlInput.value;
+		});
+
+		apiKeyInput.addEventListener('change', () => {
+			customApiKey = apiKeyInput.value;
+		});
+
+		modelSelect.addEventListener('change', () => {
+			customModel = modelSelect.value;
+		});
+	}
+
+	document.removeEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', init);
+</script>

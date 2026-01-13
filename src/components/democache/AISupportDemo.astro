@@ -1,0 +1,223 @@
+---
+---
+
+<section id="ai-support-demo" class="section relative bg-white py-16">
+	<div class="col-span-12">
+		<div class="mx-auto max-w-4xl">
+			<!-- Section Header -->
+			<div class="mb-8 text-center">
+				<h2 class="font-display text-3xl font-bold uppercase text-gray-900 md:text-4xl">
+					AI Support Bot Demo
+				</h2>
+				<p class="mt-4 text-gray-600">
+					Ask common customer support questions and see how semantic caching delivers instant responses.
+				</p>
+			</div>
+
+			<!-- Demo Container -->
+			<div class="neo-card bg-gray-50 p-6 lg:p-8">
+				<!-- Chat messages -->
+				<div id="support-chat" class="mb-6 h-96 overflow-y-auto rounded-lg bg-white p-4 space-y-4">
+					<!-- Welcome message -->
+					<div class="flex gap-3">
+						<div class="flex-shrink-0 w-8 h-8 rounded-full bg-vibe-purple flex items-center justify-center text-white font-bold">
+							AI
+						</div>
+						<div class="flex-1">
+							<div class="neo-card bg-gray-100 p-3 text-sm">
+								<p>👋 Hi! I'm your AI support assistant. Ask me anything about our product, billing, or technical issues. Try asking similar questions to see semantic caching in action!</p>
+							</div>
+							<div class="mt-1 text-xs text-gray-500">Just now</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Quick questions -->
+				<div class="mb-4">
+					<div class="mb-2 text-sm font-bold text-gray-600">Quick Questions:</div>
+					<div class="flex flex-wrap gap-2">
+						<button class="quick-question-btn text-sm neo-btn bg-vibe-yellow px-4 py-2" data-question="How do I reset my password?">
+							Reset password
+						</button>
+						<button class="quick-question-btn text-sm neo-btn bg-vibe-indigo text-white px-4 py-2" data-question="What are your pricing plans?">
+							Pricing plans
+						</button>
+						<button class="quick-question-btn text-sm neo-btn bg-vibe-orange text-white px-4 py-2" data-question="How does semantic caching work?">
+							How it works
+						</button>
+						<button class="quick-question-btn text-sm neo-btn bg-vibe-purple text-white px-4 py-2" data-question="Can I integrate with my existing API?">
+							API integration
+						</button>
+					</div>
+				</div>
+
+				<!-- Input area -->
+				<div class="flex gap-3">
+					<input
+						type="text"
+						id="support-input"
+						placeholder="Type your question here..."
+						class="flex-1 rounded-lg border-4 border-black px-4 py-3 focus:outline-none focus:ring-2 focus:ring-vibe-purple"
+					/>
+					<button
+						id="support-send-btn"
+						class="neo-btn bg-vibe-purple px-6 py-3 font-bold text-white hover:bg-vibe-purple-600"
+					>
+						Send
+					</button>
+				</div>
+
+				<!-- Loading indicator -->
+				<div id="support-loading" class="mt-4 hidden">
+					<div class="flex items-center gap-2 text-sm text-gray-600">
+						<div class="h-4 w-4 animate-spin rounded-full border-2 border-vibe-purple border-t-transparent"></div>
+						<span>Processing...</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	// Simulated responses for demo purposes
+	const supportResponses = {
+		"reset password": {
+			response: "To reset your password:\n\n1. Click 'Forgot Password' on the login page\n2. Enter your email address\n3. Check your email for a reset link\n4. Click the link and create a new password\n\nIf you don't receive the email within 5 minutes, check your spam folder or contact support@vibe.ai",
+			tokens: 150,
+		},
+		"pricing": {
+			response: "Our pricing plans are designed to scale with your needs:\n\n**Free Tier**: Up to 10K requests/month, perfect for testing\n**Pro**: $99/month for 1M requests with 68% cache savings\n**Enterprise**: Custom pricing with dedicated support and SLAs\n\nAll plans include semantic caching, multi-provider support, and real-time analytics. Contact us for a custom quote!",
+			tokens: 180,
+		},
+		"semantic caching": {
+			response: "Semantic caching works by understanding the *meaning* of queries, not just exact text matches:\n\n1. **Embedding Generation**: Queries are converted to 384-dimensional vectors\n2. **Similarity Search**: We find cached responses with ≥80% cosine similarity\n3. **Fast Retrieval**: Cache hits return in ~45ms vs ~1500ms for LLM calls\n4. **Cost Savings**: Achieve 68% cache hit rates, saving 70% on API costs\n\nThis means 'How do I reset my password?' and 'Password reset help' will both hit the cache!",
+			tokens: 200,
+		},
+		"api integration": {
+			response: "Integration is simple and OpenAI-compatible:\n\n```javascript\nconst response = await fetch('https://cache.vibe.ai/v1/chat/completions', {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'application/json',\n  },\n  body: JSON.stringify({\n    model: 'gpt-4o-mini',\n    messages: [{ role: 'user', content: 'Hello!' }]\n  })\n});\n```\n\nJust point to our endpoint and we handle the rest. Works with OpenAI, Anthropic, Google, and Cohere!",
+			tokens: 170,
+		},
+	};
+
+	function findBestMatch(question) {
+		const lowerQ = question.toLowerCase();
+		for (const [key, value] of Object.entries(supportResponses)) {
+			if (lowerQ.includes(key)) {
+				return value;
+			}
+		}
+		// Default response
+		return {
+			response: "Thanks for your question! While this is a demo with simulated responses, in production, VibeCache would intelligently cache your query and return results ~33× faster on subsequent similar questions. Try asking about pricing, password resets, semantic caching, or API integration!",
+			tokens: 120,
+		};
+	}
+
+	function addMessage(text, isUser = false, isHit = false, latency = 0) {
+		const chatContainer = document.getElementById('support-chat');
+		const messageDiv = document.createElement('div');
+		messageDiv.className = 'flex gap-3';
+		
+		const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		
+		if (isUser) {
+			messageDiv.innerHTML = `
+				<div class="flex-1"></div>
+				<div class="flex-shrink-0 w-full max-w-[80%]">
+					<div class="neo-card bg-vibe-purple text-white p-3 text-sm ml-auto">
+						<p>${text}</p>
+					</div>
+					<div class="mt-1 text-xs text-gray-500 text-right">${time}</div>
+				</div>
+			`;
+		} else {
+			const badge = isHit 
+				? `<span class="inline-flex items-center gap-1 rounded-full bg-vibe-yellow px-2 py-1 text-xs font-bold text-vibe-purple">⚡ Cache Hit • ${latency}ms</span>`
+				: `<span class="inline-flex items-center gap-1 rounded-full bg-gray-300 px-2 py-1 text-xs font-bold text-gray-700">🔄 Cache Miss • ${latency}ms</span>`;
+			
+			messageDiv.innerHTML = `
+				<div class="flex-shrink-0 w-8 h-8 rounded-full bg-vibe-purple flex items-center justify-center text-white font-bold text-sm">
+					AI
+				</div>
+				<div class="flex-1">
+					<div class="neo-card bg-gray-100 p-3 text-sm">
+						<p style="white-space: pre-line;">${text}</p>
+					</div>
+					<div class="mt-1 flex items-center gap-2">
+						<span class="text-xs text-gray-500">${time}</span>
+						${badge}
+					</div>
+				</div>
+			`;
+		}
+		
+		chatContainer.appendChild(messageDiv);
+		chatContainer.scrollTop = chatContainer.scrollHeight;
+	}
+
+	async function sendSupportMessage(question) {
+		if (!question.trim()) return;
+
+		// Clear input
+		const input = document.getElementById('support-input');
+		input.value = '';
+
+		// Add user message
+		addMessage(question, true);
+
+		// Show loading
+		const loading = document.getElementById('support-loading');
+		loading.classList.remove('hidden');
+
+		// Simulate cache check
+		const startTime = Date.now();
+		
+		// Random cache hit (70% hit rate for demo)
+		const isHit = Math.random() < 0.7;
+		const latency = isHit ? 40 + Math.random() * 20 : 1200 + Math.random() * 600;
+		
+		// Wait for simulated latency
+		await new Promise(resolve => setTimeout(resolve, latency));
+		
+		loading.classList.add('hidden');
+
+		// Get response
+		const match = findBestMatch(question);
+		addMessage(match.response, false, isHit, Math.round(latency));
+
+		// Track metrics
+		if (window.trackCacheRequest) {
+			const tokensSaved = isHit ? match.tokens : 0;
+			const costSaved = isHit ? (match.tokens / 1000000) * 0.15 : 0; // $0.15 per 1M tokens
+			window.trackCacheRequest(isHit, latency, tokensSaved, costSaved);
+		}
+	}
+
+	function init() {
+		const input = document.getElementById('support-input');
+		const sendBtn = document.getElementById('support-send-btn');
+		const quickBtns = document.querySelectorAll('.quick-question-btn');
+
+		sendBtn.addEventListener('click', () => {
+			sendSupportMessage(input.value);
+		});
+
+		input.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') {
+				sendSupportMessage(input.value);
+			}
+		});
+
+		quickBtns.forEach(btn => {
+			btn.addEventListener('click', () => {
+				const question = btn.dataset.question;
+				input.value = question;
+				sendSupportMessage(question);
+			});
+		});
+	}
+
+	document.removeEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', init);
+</script>

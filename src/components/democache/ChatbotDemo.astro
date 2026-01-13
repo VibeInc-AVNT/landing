@@ -1,0 +1,268 @@
+---
+---
+
+<section id="chatbot-demo" class="section relative bg-gray-50 py-16">
+	<div class="col-span-12">
+		<div class="mx-auto max-w-4xl">
+			<!-- Section Header -->
+			<div class="mb-8 text-center">
+				<h2 class="font-display text-3xl font-bold uppercase text-gray-900 md:text-4xl">
+					General Chatbot Demo
+				</h2>
+				<p class="mt-4 text-gray-600">
+					Have a conversation and see how repeated or similar queries benefit from semantic caching.
+				</p>
+			</div>
+
+			<!-- Demo Container -->
+			<div class="neo-card bg-white p-6 lg:p-8">
+				<!-- Chat messages -->
+				<div id="chatbot-chat" class="mb-6 h-96 overflow-y-auto rounded-lg bg-gray-50 p-4 space-y-4">
+					<!-- Welcome message -->
+					<div class="flex gap-3">
+						<div class="flex-shrink-0 w-8 h-8 rounded-full bg-vibe-indigo flex items-center justify-center text-white font-bold">
+							🤖
+						</div>
+						<div class="flex-1">
+							<div class="neo-card bg-white p-3 text-sm">
+								<p>Hello! I'm a general-purpose AI assistant. Ask me anything, and watch how semantic caching makes repeated queries lightning fast! ⚡</p>
+							</div>
+							<div class="mt-1 text-xs text-gray-500">Just now</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Quick prompts -->
+				<div class="mb-4">
+					<div class="mb-2 text-sm font-bold text-gray-600">Try These Prompts:</div>
+					<div class="flex flex-wrap gap-2">
+						<button class="chatbot-prompt-btn text-sm neo-btn bg-vibe-yellow px-4 py-2" data-prompt="Explain quantum computing">
+							Quantum computing
+						</button>
+						<button class="chatbot-prompt-btn text-sm neo-btn bg-vibe-indigo text-white px-4 py-2" data-prompt="What is machine learning?">
+							Machine learning
+						</button>
+						<button class="chatbot-prompt-btn text-sm neo-btn bg-vibe-orange text-white px-4 py-2" data-prompt="Best practices for API design">
+							API design
+						</button>
+						<button class="chatbot-prompt-btn text-sm neo-btn bg-vibe-purple text-white px-4 py-2" data-prompt="Tell me about semantic caching">
+							Semantic caching
+						</button>
+					</div>
+				</div>
+
+				<!-- Input area -->
+				<div class="flex gap-3">
+					<input
+						type="text"
+						id="chatbot-input"
+						placeholder="Ask me anything..."
+						class="flex-1 rounded-lg border-4 border-black px-4 py-3 focus:outline-none focus:ring-2 focus:ring-vibe-indigo"
+					/>
+					<button
+						id="chatbot-send-btn"
+						class="neo-btn bg-vibe-indigo px-6 py-3 font-bold text-white hover:bg-vibe-indigo-600"
+					>
+						Send
+					</button>
+				</div>
+
+				<!-- Loading indicator -->
+				<div id="chatbot-loading" class="mt-4 hidden">
+					<div class="flex items-center gap-2 text-sm text-gray-600">
+						<div class="h-4 w-4 animate-spin rounded-full border-2 border-vibe-indigo border-t-transparent"></div>
+						<span>Thinking...</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Demo explanation -->
+			<div class="mt-6 neo-card bg-vibe-yellow/20 p-4">
+				<div class="flex gap-3">
+					<div class="text-2xl">💡</div>
+					<div class="flex-1 text-sm">
+						<strong>Pro Tip:</strong> Ask the same question with different wording (e.g., "Explain quantum computing" vs "What is quantum computing?") to see semantic caching in action. The cache recognizes similar meanings!
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	// Knowledge base for demo responses
+	const chatbotKnowledge = {
+		"quantum computing": {
+			response: "Quantum computing is a revolutionary computing paradigm that leverages quantum mechanical phenomena like superposition and entanglement. Unlike classical computers that use bits (0 or 1), quantum computers use qubits that can exist in multiple states simultaneously.\n\nKey advantages:\n• Exponential speedup for specific problems\n• Breakthrough potential in cryptography, drug discovery, and optimization\n• Can solve problems intractable for classical computers\n\nHowever, quantum computers are still in early stages and face challenges like error correction and maintaining quantum coherence.",
+			tokens: 220,
+		},
+		"machine learning": {
+			response: "Machine learning is a subset of artificial intelligence where systems learn from data without being explicitly programmed. Instead of following pre-defined rules, ML algorithms identify patterns and make decisions based on examples.\n\nMain types:\n• **Supervised Learning**: Learning from labeled data (e.g., classification, regression)\n• **Unsupervised Learning**: Finding patterns in unlabeled data (e.g., clustering)\n• **Reinforcement Learning**: Learning through trial and error with rewards\n\nML powers modern applications like recommendation systems, autonomous vehicles, and natural language processing.",
+			tokens: 240,
+		},
+		"api design": {
+			response: "Best practices for API design:\n\n**1. RESTful Principles**\n• Use clear, hierarchical URLs\n• Leverage HTTP methods correctly (GET, POST, PUT, DELETE)\n• Return appropriate status codes\n\n**2. Consistency**\n• Maintain consistent naming conventions\n• Use standard response formats (JSON)\n• Version your API (/v1/, /v2/)\n\n**3. Documentation**\n• Provide clear, comprehensive docs\n• Include code examples\n• Use OpenAPI/Swagger specifications\n\n**4. Security**\n• Implement authentication (OAuth, JWT)\n• Use HTTPS\n• Rate limiting and validation\n\n**5. Performance**\n• Enable caching (hint: like VibeCache! 😉)\n• Pagination for large datasets\n• Compression",
+			tokens: 260,
+		},
+		"semantic caching": {
+			response: "Semantic caching is an intelligent caching approach that understands the *meaning* of queries rather than just matching exact text.\n\n**How it differs from traditional caching:**\n\n**Traditional**: \"What is ML?\" ≠ \"Explain machine learning\" (cache miss)\n**Semantic**: Both queries match! (cache hit) ⚡\n\n**The technology:**\n1. Convert queries to embeddings (vector representations)\n2. Use cosine similarity to find semantically similar cached responses\n3. Return cached results if similarity ≥ 80%\n\n**Real-world impact:**\n• 68% cache hit rate vs 10-15% for exact matching\n• ~45ms response time vs ~1500ms for LLM calls\n• 70% reduction in API costs\n\nVibeCache implements this at scale with distributed edge nodes! 🚀",
+			tokens: 280,
+		},
+	};
+
+	// Track conversation for better cache simulation
+	const conversationHistory = [];
+
+	function findChatbotResponse(query) {
+		const lowerQ = query.toLowerCase();
+		
+		// Check if this is semantically similar to a previous query
+		for (const prev of conversationHistory) {
+			if (calculateSimilarity(query, prev.query) > 0.8) {
+				return { ...prev.response, wasSimilar: true };
+			}
+		}
+
+		// Find new response
+		for (const [key, value] of Object.entries(chatbotKnowledge)) {
+			if (lowerQ.includes(key) || key.includes(lowerQ.split(' ').filter(w => w.length > 3)[0])) {
+				return { ...value, wasSimilar: false };
+			}
+		}
+
+		// Default response
+		return {
+			response: "That's an interesting question! In this demo, I have pre-programmed responses for topics like quantum computing, machine learning, API design, and semantic caching.\n\nTry asking about one of those topics, or rephrase a previous question to see semantic caching in action. For example, if you asked 'What is quantum computing?', try 'Explain quantum computing' to see a cache hit! ⚡",
+			tokens: 140,
+			wasSimilar: false,
+		};
+	}
+
+	function calculateSimilarity(str1, str2) {
+		// Simple similarity calculation for demo
+		const words1 = str1.toLowerCase().split(' ').filter(w => w.length > 3);
+		const words2 = str2.toLowerCase().split(' ').filter(w => w.length > 3);
+		
+		if (words1.length === 0 || words2.length === 0) return 0;
+		
+		const commonWords = words1.filter(w => words2.includes(w)).length;
+		return (commonWords * 2) / (words1.length + words2.length);
+	}
+
+	function addChatbotMessage(text, isUser = false, isHit = false, latency = 0) {
+		const chatContainer = document.getElementById('chatbot-chat');
+		const messageDiv = document.createElement('div');
+		messageDiv.className = 'flex gap-3';
+		
+		const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		
+		if (isUser) {
+			messageDiv.innerHTML = `
+				<div class="flex-1"></div>
+				<div class="flex-shrink-0 w-full max-w-[80%]">
+					<div class="neo-card bg-vibe-indigo text-white p-3 text-sm ml-auto">
+						<p>${text}</p>
+					</div>
+					<div class="mt-1 text-xs text-gray-500 text-right">${time}</div>
+				</div>
+			`;
+		} else {
+			const badge = isHit 
+				? `<span class="inline-flex items-center gap-1 rounded-full bg-vibe-yellow px-2 py-1 text-xs font-bold text-vibe-purple">⚡ Cache Hit • ${latency}ms</span>`
+				: `<span class="inline-flex items-center gap-1 rounded-full bg-gray-300 px-2 py-1 text-xs font-bold text-gray-700">🔄 Cache Miss • ${latency}ms</span>`;
+			
+			messageDiv.innerHTML = `
+				<div class="flex-shrink-0 w-8 h-8 rounded-full bg-vibe-indigo flex items-center justify-center text-white font-bold">
+					🤖
+				</div>
+				<div class="flex-1">
+					<div class="neo-card bg-white p-3 text-sm">
+						<p style="white-space: pre-line;">${text}</p>
+					</div>
+					<div class="mt-1 flex items-center gap-2">
+						<span class="text-xs text-gray-500">${time}</span>
+						${badge}
+					</div>
+				</div>
+			`;
+		}
+		
+		chatContainer.appendChild(messageDiv);
+		chatContainer.scrollTop = chatContainer.scrollHeight;
+	}
+
+	async function sendChatbotMessage(prompt) {
+		if (!prompt.trim()) return;
+
+		// Clear input
+		const input = document.getElementById('chatbot-input');
+		input.value = '';
+
+		// Add user message
+		addChatbotMessage(prompt, true);
+
+		// Show loading
+		const loading = document.getElementById('chatbot-loading');
+		loading.classList.remove('hidden');
+
+		// Get response
+		const responseData = findChatbotResponse(prompt);
+		
+		// Determine if cache hit (similar to previous query or explicitly marked)
+		const isHit = responseData.wasSimilar || Math.random() < 0.68; // 68% base hit rate
+		const latency = isHit ? 35 + Math.random() * 30 : 1000 + Math.random() * 1000;
+		
+		// Wait for simulated latency
+		await new Promise(resolve => setTimeout(resolve, latency));
+		
+		loading.classList.add('hidden');
+
+		// Add to conversation history
+		if (!responseData.wasSimilar) {
+			conversationHistory.push({
+				query: prompt,
+				response: {
+					response: responseData.response,
+					tokens: responseData.tokens,
+				},
+			});
+		}
+
+		// Add response
+		addChatbotMessage(responseData.response, false, isHit, Math.round(latency));
+
+		// Track metrics
+		if (window.trackCacheRequest) {
+			const tokensSaved = isHit ? responseData.tokens : 0;
+			const costSaved = isHit ? (responseData.tokens / 1000000) * 0.15 : 0;
+			window.trackCacheRequest(isHit, latency, tokensSaved, costSaved);
+		}
+	}
+
+	function init() {
+		const input = document.getElementById('chatbot-input');
+		const sendBtn = document.getElementById('chatbot-send-btn');
+		const promptBtns = document.querySelectorAll('.chatbot-prompt-btn');
+
+		sendBtn.addEventListener('click', () => {
+			sendChatbotMessage(input.value);
+		});
+
+		input.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') {
+				sendChatbotMessage(input.value);
+			}
+		});
+
+		promptBtns.forEach(btn => {
+			btn.addEventListener('click', () => {
+				const prompt = btn.dataset.prompt;
+				input.value = prompt;
+				sendChatbotMessage(prompt);
+			});
+		});
+	}
+
+	document.removeEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', init);
+</script>
