@@ -5,7 +5,7 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<div class="warning-banner relative z-[60] bg-vibe-yellow/90 border-b-4 border-vibe-yellow-700 py-3 md:py-4">
+<div id="warning-banner" class="warning-banner relative z-[60] bg-vibe-yellow/90 border-b-4 border-vibe-yellow-700 py-3 md:py-4">
 	<div class="section">
 		<div class="col-span-12">
 			<div class="mx-auto flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:gap-4">
@@ -13,14 +13,14 @@ const t = useTranslations(lang);
 				<svg class="h-5 w-5 flex-shrink-0 text-vibe-yellow-900 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
 				</svg>
-				
+
 				<!-- Warning Message -->
 				<div class="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
 					<p class="text-sm font-semibold text-vibe-yellow-900 md:text-base">
 						{t("warning.message")}
 					</p>
-					<a 
-						href="mailto:support@avunite.com" 
+					<a
+						href="mailto:support@avunite.com"
 						class="inline-flex items-center gap-1 rounded-md bg-vibe-purple px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-vibe-purple-700 md:px-4 md:py-2 md:text-sm"
 					>
 						{t("warning.cta")}
@@ -29,14 +29,47 @@ const t = useTranslations(lang);
 						</svg>
 					</a>
 				</div>
+
+				<!-- Close Button -->
+				<button
+					id="close-banner"
+					class="absolute right-4 top-2 rounded-md p-1 text-vibe-yellow-900 transition-colors hover:bg-vibe-yellow-700/50 focus:outline-none focus:ring-2 focus:ring-vibe-yellow-900 focus:ring-offset-2"
+					aria-label="Dismiss banner"
+				>
+					<svg class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+					</svg>
+				</button>
 			</div>
 		</div>
 	</div>
 </div>
 
+<script>
+	const banner = document.getElementById('warning-banner');
+	const closeBtn = document.getElementById('close-banner');
+	const storageKey = 'vibe-warning-dismissed';
+
+	// Check if banner was previously dismissed
+	if (localStorage.getItem(storageKey) === 'true') {
+		banner?.remove();
+	}
+
+	// Handle close button click
+	closeBtn?.addEventListener('click', () => {
+		localStorage.setItem(storageKey, 'true');
+		banner?.classList.add('closing');
+		setTimeout(() => banner?.remove(), 400); // Wait for animation
+	});
+</script>
+
 <style>
 	.warning-banner {
 		animation: slideDown 0.5s ease-out;
+	}
+
+	.warning-banner.closing {
+		animation: slideUp 0.4s ease-in forwards;
 	}
 
 	@keyframes slideDown {
@@ -47,6 +80,17 @@ const t = useTranslations(lang);
 		to {
 			transform: translateY(0);
 			opacity: 1;
+		}
+	}
+
+	@keyframes slideUp {
+		from {
+			transform: translateY(0);
+			opacity: 1;
+		}
+		to {
+			transform: translateY(-100%);
+			opacity: 0;
 		}
 	}
 </style>
