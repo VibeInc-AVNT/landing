@@ -45,31 +45,42 @@ const t = useTranslations(lang);
 	</div>
 </div>
 
-<script>
-	const banner = document.getElementById('warning-banner');
-	const closeBtn = document.getElementById('close-banner');
-	const storageKey = 'vibe-warning-dismissed';
+<script is:inline>
+	(() => {
+		const banner = document.getElementById('warning-banner');
+		const closeBtn = document.getElementById('close-banner');
+		const storageKey = 'vibe-warning-dismissed';
 
-	// Check if banner was previously dismissed
-	if (localStorage.getItem(storageKey) === 'true') {
-		banner?.remove();
-	}
+		// Check if banner was previously dismissed
+		try {
+			if (localStorage.getItem(storageKey) === 'true') {
+				banner?.remove();
+				return;
+			}
+		} catch {
+			// localStorage not available, ignore
+		}
 
-	// Handle close button click
-	closeBtn?.addEventListener('click', () => {
-		localStorage.setItem(storageKey, 'true');
-		banner?.classList.add('closing');
-		setTimeout(() => banner?.remove(), 400); // Wait for animation
-	});
+		// Handle close button click
+		closeBtn?.addEventListener('click', () => {
+			try {
+				localStorage.setItem(storageKey, 'true');
+			} catch {
+				// localStorage not available, ignore
+			}
+			if (banner) {
+				banner.style.transition = 'transform 0.3s ease-in, opacity 0.3s ease-in';
+				banner.style.transform = 'translateY(-100%)';
+				banner.style.opacity = '0';
+				setTimeout(() => banner.remove(), 300);
+			}
+		});
+	})();
 </script>
 
 <style>
 	.warning-banner {
 		animation: slideDown 0.5s ease-out;
-	}
-
-	.warning-banner.closing {
-		animation: slideUp 0.4s ease-in forwards;
 	}
 
 	@keyframes slideDown {
@@ -80,17 +91,6 @@ const t = useTranslations(lang);
 		to {
 			transform: translateY(0);
 			opacity: 1;
-		}
-	}
-
-	@keyframes slideUp {
-		from {
-			transform: translateY(0);
-			opacity: 1;
-		}
-		to {
-			transform: translateY(-100%);
-			opacity: 0;
 		}
 	}
 </style>
